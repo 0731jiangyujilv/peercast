@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  tgId          BigInt   @id
+  walletAddress String?  @db.VarChar(42)
+  username      String?  @db.VarChar(255)
+  createdAt     DateTime @default(now())
+
+  betsAsP1 Bet[] @relation("participant1")
+  betsAsP2 Bet[] @relation("participant2")
+  wins     Bet[] @relation("winner")
+
+  @@map("users")
+}
+
+enum BetStatus {
+  PROPOSED
+  ACCEPTED
+  CREATED
+  DEPOSITING
+  LOCKED
+  SETTLED
+  CANCELLED
+}
+
+model Bet {
+  id              Int       @id @default(autoincrement())
+  betId           Int?      @unique
+  contractAddress String?   @db.VarChar(42)
+  p1TgId          BigInt
+  p2TgId          BigInt?
+  p1Address       String?   @db.VarChar(42)
+  p2Address       String?   @db.VarChar(42)
+  asset           String    @db.VarChar(20)
+  amount          Decimal
+  duration        Int
+  direction       String    @default("UP") @db.VarChar(4)
+  p1Deposited     Boolean   @default(false)
+  p2Deposited     Boolean   @default(false)
+  status          BetStatus @default(PROPOSED)
+  messageId       BigInt?
+  chatId          BigInt
+  createdAt       DateTime  @default(now())
+  startTime       DateTime?
+  endTime         DateTime?
+  winnerTgId      BigInt?
+  startPrice      String?   @db.VarChar(40)
+  endPrice        String?   @db.VarChar(40)
+  txHash          String?   @db.VarChar(66)
+
+  participant1 User  @relation("participant1", fields: [p1TgId], references: [tgId])
+  participant2 User? @relation("participant2", fields: [p2TgId], references: [tgId])
+  winner       User? @relation("winner", fields: [winnerTgId], references: [tgId])
+
+  @@map("bets")
+}

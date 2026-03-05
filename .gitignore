@@ -54,7 +54,8 @@ chainlink-agent-skills/
 secrets.yaml
 *.pem
 *.key
-.deploy
+.deploy*
 .exclude
 .env.production
 docs
+
