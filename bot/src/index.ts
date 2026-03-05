@@ -6,7 +6,7 @@ import { startEventListener } from "./services/events"
 // import { startSettlementCron } from "./services/settlement"
 
 async function main() {
-  console.log("🤖 Starting BetSys Bot...")
+  console.log("🤖 Starting Chatutu Bot...")
 
   // Start Express API server
   app.listen(config.PORT, () => {

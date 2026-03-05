@@ -2,14 +2,14 @@ import type { ParsedBetIntent } from "./services/openai"
 
 export function welcomeMessage(): string {
   return [
-    "🎲 *BetSys — 1v1 Crypto Betting*",
+    "🎲 *Chatutu — 1v1 Crypto Betting*",
     "",
     "Instant crypto price bets in group chats!",
     "",
     "📝 *Create a bet:*",
     "Mention me with your bet description, e.g.:",
-    '`@betsys_bot bet @alice 100 BTC 5m up`',
-    '`@betsys_bot bet @bob 50 LINK 1h down`',
+    '`@chatutu_bot bet @alice 100 BTC 5m up`',
+    '`@chatutu_bot bet @bob 50 LINK 1h down`',
     "",
     "📋 *Commands:*",
     "/start — Welcome",
@@ -53,8 +53,8 @@ export function helpMessage(): string {
     "",
     "🗣 *Natural language bets:*",
     "Mention me in a group chat with your bet description:",
-    '• `@betsys_bot bet @user 100 BTC 5m up`',
-    '• `@betsys_bot bet @user 50 LINK 1h down`',
+    '• `@chatutu_bot bet @user 100 BTC 5m up`',
+    '• `@chatutu_bot bet @user 50 LINK 1h down`',
     "",
     "AI will parse your intent and confirm the parameters.",
     "",

@@ -1,7 +1,7 @@
 {
-  "name": "betsys",
+  "name": "chatutu",
   "version": "0.1.0",
-  "description": "1v1 Betting Telegram Bot with Chainlink Integration",
+  "description": "Chatutu (chat you to you) — 1v1 Betting Telegram Bot with Chainlink Integration",
   "private": true,
   "scripts": {
     "contracts:build": "cd contracts && forge build",

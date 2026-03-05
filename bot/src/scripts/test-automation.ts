@@ -146,7 +146,7 @@ async function main() {
           gasLimit: 500_000,
           triggerType: 0,
           billingToken: LINK_TOKEN,
-          name: `BetSys Test: ${betAddr.slice(0, 10)}`,
+          name: `Chatutu Test: ${betAddr.slice(0, 10)}`,
           encryptedEmail: "0x" as `0x${string}`,
           checkData: "0x" as `0x${string}`,
           triggerConfig: "0x" as `0x${string}`,
