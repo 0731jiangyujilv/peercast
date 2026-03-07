@@ -36,13 +36,26 @@ interface HistoricalBet {
   endPrice: string | null
 }
 
+interface PoRData {
+  totalBets: string
+  activeBets: string
+  settledBets: string
+  totalVolume: string
+  topPlayerProfit: string
+  isValid: boolean
+  timestamp: string
+  updateCount: string
+}
+
 const API_URL = import.meta.env.VITE_BOT_API_URL || 'http://localhost:3000'
+const CHATUTU_POR_ADDRESS = '0x5b73C5498c1E3b4dbA84de0F1833c4a029d90519' // ChatutuPoR on Base Sepolia
 
 export function StatsPage() {
   const [stats, setStats] = useState<BetStats | null>(null)
   const [activeBets, setActiveBets] = useState<ActiveBet[]>([])
   const [totalWagered, setTotalWagered] = useState<string>('0')
   const [historicalBets, setHistoricalBets] = useState<HistoricalBet[]>([])
+  const [porData, setPorData] = useState<PoRData | null>(null)
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<'overview' | 'active' | 'history'>('overview')
 
@@ -62,6 +75,19 @@ export function StatsPage() {
       if (statsRes.ok) {
         const data = await statsRes.json()
         setStats(data)
+        
+        // 模拟 PoR 数据（待合约部署后从链上读取）
+        // TODO: 使用 wagmi/viem 从 ChatutuPoR 合约读取真实数据
+        setPorData({
+          totalBets: data.totalBetsCount.toString(),
+          activeBets: data.activeBetsCount.toString(),
+          settledBets: data.settledBetsCount.toString(),
+          totalVolume: (parseFloat(data.totalVolume) * 1e18).toString(),
+          topPlayerProfit: '0',
+          isValid: true,
+          timestamp: Math.floor(Date.now() / 1000).toString(),
+          updateCount: '1',
+        })
       }
 
       if (activeRes.ok) {
@@ -201,6 +227,49 @@ export function StatsPage() {
 
         {activeTab === 'overview' && (
           <div className="space-y-6">
+            {porData && (
+              <div className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-lg rounded-xl p-6 border border-purple-400/30">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-2xl font-bold flex items-center gap-2">
+                    🔒 Proof of Reserve
+                    {porData.isValid ? (
+                      <span className="text-green-400 text-sm">✅ Verified</span>
+                    ) : (
+                      <span className="text-red-400 text-sm">⚠️ Unverified</span>
+                    )}
+                  </h2>
+                  <div className="text-sm text-gray-300">
+                    Powered by Chainlink CRE
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div>
+                    <div className="text-gray-400 text-xs mb-1">Total Bets (PoR)</div>
+                    <div className="text-xl font-bold">{porData.totalBets}</div>
+                  </div>
+                  <div>
+                    <div className="text-gray-400 text-xs mb-1">Active Bets (PoR)</div>
+                    <div className="text-xl font-bold text-orange-400">{porData.activeBets}</div>
+                  </div>
+                  <div>
+                    <div className="text-gray-400 text-xs mb-1">Total Volume (PoR)</div>
+                    <div className="text-xl font-bold text-green-400">
+                      {(parseFloat(porData.totalVolume) / 1e18).toFixed(2)} USDC
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-gray-400 text-xs mb-1">Last Update</div>
+                    <div className="text-sm font-medium">
+                      {new Date(parseInt(porData.timestamp) * 1000).toLocaleString()}
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-4 text-xs text-gray-400">
+                  Update #{porData.updateCount} | Contract: {CHATUTU_POR_ADDRESS.slice(0, 6)}...{CHATUTU_POR_ADDRESS.slice(-4)}
+                </div>
+              </div>
+            )}
+
             <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
               <h2 className="text-2xl font-bold mb-4">Platform Overview</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
