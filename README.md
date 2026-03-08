@@ -1,10 +1,10 @@
-# ChatUtU
+# Peercast
 
-**ChatUtU (Chat You to You)** — A decentralized 1v1 betting platform built on Telegram with Chainlink integration.
+**Peercast** — A social-native prediction network powered by Chainlink CRE.
 
 ## Overview
 
-ChatUtU is a peer-to-peer betting platform that enables users to create and settle bets through a Telegram bot interface. The platform leverages blockchain technology for transparent and trustless bet management, with Chainlink providing secure off-chain data and automation.
+Peercast is a peer-to-peer betting platform that enables users to create and settle bets through a Telegram bot interface. The platform leverages blockchain technology for transparent and trustless bet management, with Chainlink providing secure off-chain data and automation.
 
 ## Architecture
 
