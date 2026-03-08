@@ -16776,6 +16776,7 @@ var getOffchainData = (runtime2) => {
 var getOnchainData = (runtime2) => {
   runtime2.log("⛓️  Reading onchain data");
   const evmConfig = runtime2.config.evms[0];
+  console.log(evmConfig);
   const network248 = getNetwork({
     chainFamily: "evm",
     chainSelectorName: evmConfig.chainSelectorName,
