@@ -151,9 +151,41 @@ bot.command("ranking", async (ctx) => {
 bot.command("bet", handleBetCommand)
 bot.on("text", async (ctx) => {
   const text = ctx.message.text
+  console.log("text", text)
 
-  // Skip commands
-  if (text.startsWith("/")) return
+  // 处理斜杠命令（支持群聊中的命令）
+  if (text.startsWith("/")) {
+    const command = text.split(/\s+/)[0].substring(1).split("@")[0]
+
+    console.log("command", command)
+    
+    // 手动处理命令
+    switch (command) {
+      case "stats":
+        const stats = await getOverallStats()
+        await ctx.replyWithMarkdown(
+          statsMessage(
+            stats.activeBetsCount,
+            stats.totalBetsCount,
+            stats.totalVolume,
+            stats.settledBetsCount,
+            config.WEBAPP_URL
+          )
+        )
+        return
+      case "ranking":
+        const leaderboard = await getLeaderboard(10)
+        await ctx.replyWithMarkdown(leaderboardMessage(leaderboard, config.WEBAPP_URL))
+        return
+      case "history":
+        const bets = await getHistoricalBets(10)
+        await ctx.replyWithMarkdown(historyMessage(bets, config.WEBAPP_URL))
+        return
+      default:
+        // 其他命令由 bot.command() 处理
+        return
+    }
+  }
 
   // Skip very short messages
   if (text.length < 10) return

@@ -61,7 +61,10 @@ export function helpMessage(): string {
     "/stats — Platform statistics",
     "/activebets — Current active bets",
     "/history — Historical bet results",
-    "/ranking — Profit leaderboard",
+    "/ranking — Profit leaderboard (verified by Chainlink PoR)",
+    "",
+    "🔗 *Web Interface:*",
+    "View full stats and leaderboard with on-chain verification",
   ].join("\n")
 }
 
@@ -303,7 +306,7 @@ export function leaderboardMessage(
     lines.push("")
   })
 
-  lines.push(`🌐 [View full leaderboard](${webappUrl}/stats)`)
+  lines.push(`🌐 [View full leaderboard](${webappUrl}/leaderboard)`)
 
   return lines.join("\n")
 }
