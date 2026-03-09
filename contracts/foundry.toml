@@ -16,8 +16,12 @@ runs = 256
 
 [rpc_endpoints]
 base_sepolia = "${BASE_SEPOLIA_RPC_URL}"
+worldchain = "${WORLD_CHAIN_RPC_URL}"
+worldchain_sepolia = "${WORLD_CHAIN_SEPOLIA_RPC_URL}"
 
 [etherscan]
 base_sepolia = { key = "${BASESCAN_API_KEY}", url = "https://api.etherscan.io/v2/api?chainid=84532", chain = 84532 }
+worldchain = { key = "${WORLDSCAN_API_KEY}", url = "https://worldchain-mainnet.explorer.alchemy.com/api", chain = 480 }
+worldchain_sepolia = { key = "${WORLDSCAN_API_KEY}", url = "https://worldchain-sepolia.explorer.alchemy.com/api", chain = 4801 }
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
