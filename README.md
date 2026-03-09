@@ -53,7 +53,7 @@ The project consists of three main components:
 
 ```bash
 git clone <repository-url>
-cd chatutu
+cd peercast
 ```
 
 ### 2. Install Dependencies
@@ -76,7 +76,7 @@ Create `.env` files in each component directory:
 #### Bot (`/bot/.env`)
 ```env
 TELEGRAM_BOT_TOKEN=your_telegram_bot_token
-DATABASE_URL=postgresql://user:password@localhost:5432/chatutu
+DATABASE_URL=postgresql://user:password@localhost:5432/peercast
 BASE_SEPOLIA_RPC_URL=your_rpc_url
 PRIVATE_KEY=your_private_key
 ```
@@ -159,7 +159,7 @@ npm run preview
 ## Project Structure
 
 ```
-chatutu/
+peercast/
 ├── bot/                    # Telegram bot backend
 │   ├── src/
 │   │   ├── bot.ts         # Bot logic
@@ -259,4 +259,4 @@ For questions or issues, please open an issue in the repository or contact the d
 
 ---
 
-Built with ❤️ using Chainlink, Base, and Telegram
+Built with ❤️ using Chainlink, World Mini App, and Base x402.

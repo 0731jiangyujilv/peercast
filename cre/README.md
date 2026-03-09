@@ -1,7 +1,7 @@
 
-# Chatutu Proof of Reserve (PoR)
+# Peercast Proof of Reserve (PoR)
 
-A Chainlink CRE-based Proof of Reserve system for the Chatutu betting platform.
+A Chainlink CRE-based Proof of Reserve system for the Peercast social-native prediction market.
 
 ## Features
 
@@ -27,7 +27,7 @@ Scheduled Trigger (Cron: every 10 minutes)
    - Compare on-chain and off-chain total bet counts
     ↓
 4. Write on-chain (EVM Write)
-   - ChatutuPoR contract stores verification results
+   - PeercastPoR contract stores verification results
 ```
 
 ## Data Structures
@@ -52,7 +52,7 @@ struct PoRData {
 ### 1. Install dependencies
 
 ```bash
-cd chatutu-por/por
+cd peercast-por/por
 bun install
 ```
 
@@ -70,7 +70,7 @@ Edit `.env` and set:
 
 Edit `por/config.staging.json` and set:
 - `botApiUrl`: Bot API URL
-- `evms[0].porAddress`: Deployed ChatutuPoR contract address
+- `evms[0].porAddress`: Deployed PeercastPoR contract address
 - `evms[0].betFactoryAddress`: BetFactory contract address
 
 ## Usage
@@ -78,7 +78,7 @@ Edit `por/config.staging.json` and set:
 ### Local simulation (no real transactions)
 
 ```bash
-cd chatutu-por
+cd peercast-por
 cre workflow simulate por
 ```
 
@@ -103,13 +103,13 @@ cre secret set BOT_API_URL https://your-production-api.com
 
 ## Contract Deployment
 
-### 1. Deploy ChatutuPoR
+### 1. Deploy PeercastPoR
 
 ```bash
 cd ../../contracts
 
 # Deploy to Base Sepolia
-forge create src/ChatutuPoR.sol:ChatutuPoR \
+forge create src/PeercastPoR.sol:PeercastPoR \
   --rpc-url $BASE_SEPOLIA_RPC_URL \
   --private-key $PRIVATE_KEY \
   --constructor-args <FORWARDER_ADDRESS>
@@ -125,7 +125,7 @@ forge verify-contract \
   --chain-id 84532 \
   --compiler-version v0.8.24 \
   <CONTRACT_ADDRESS> \
-  src/ChatutuPoR.sol:ChatutuPoR \
+  src/PeercastPoR.sol:PeercastPoR \
   --constructor-args $(cast abi-encode "constructor(address)" <FORWARDER_ADDRESS>)
 ```
 
@@ -173,7 +173,7 @@ Response:
 ### Get latest PoR data
 
 ```solidity
-// Call the ChatutuPoR contract
+// Call the PeercastPoR contract
 function getLatestData() external view returns (PoRData memory)
 ```
 
