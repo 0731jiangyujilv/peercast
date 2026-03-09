@@ -199,12 +199,12 @@ async function updateTelegramBetCreated(dbBetId: number, contractAddress: string
         `📊 ${bet.asset} | 💰 ${bet.amount} USDC | ⏱ ${formatDurationShort(bet.duration)}`,
         "",
         "👉 Both players: tap below to deposit your wager.",
-        "⏰ Deposit timeout: 30 min",
+        "⏰ Deposit timeout: 3 min",
       ].join("\n"),
       {
         parse_mode: "Markdown",
         ...Markup.inlineKeyboard([
-          [Markup.button.url("💳 Deposit Now", depositUrl)],
+          [Markup.button.url("💳 Deposit Via Base X402", depositUrl)],
           [Markup.button.url("📋 View Contract", explorerUrl)],
         ]),
       }

@@ -1,4 +1,4 @@
-import { createPublicClient, createWalletClient, http, getAddress, parseUnits } from "viem"
+import { createPublicClient, createWalletClient, http, getAddress, parseUnits, type Chain } from "viem"
 import { privateKeyToAccount } from "viem/accounts"
 import { baseSepolia } from "viem/chains"
 import { config } from "../config"
@@ -9,6 +9,20 @@ const operatorAccount = privateKeyToAccount(
     : `0x${config.OPERATOR_PRIVATE_KEY}`) as `0x${string}`
 )
 
+// Define World Chain Sepolia
+const worldChainSepolia: Chain = {
+  id: config.WORLD_CHAIN_ID,
+  name: 'World Chain Sepolia',
+  nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+  rpcUrls: {
+    default: { http: [config.WORLD_CHAIN_RPC_URL] },
+  },
+  blockExplorers: {
+    default: { name: 'Worldscan', url: 'https://sepolia.worldscan.org' },
+  },
+}
+
+// Base Sepolia clients (for Telegram bot)
 export const walletClient = createWalletClient({
   account: operatorAccount,
   chain: baseSepolia,
@@ -18,6 +32,18 @@ export const walletClient = createWalletClient({
 export const publicClient = createPublicClient({
   chain: baseSepolia,
   transport: http(config.RPC_URL),
+})
+
+// World Chain clients (for Mini App)
+export const worldWalletClient = createWalletClient({
+  account: operatorAccount,
+  chain: worldChainSepolia,
+  transport: http(config.WORLD_CHAIN_RPC_URL),
+})
+
+export const worldPublicClient = createPublicClient({
+  chain: worldChainSepolia,
+  transport: http(config.WORLD_CHAIN_RPC_URL),
 })
 
 export const BetFactoryAbi = [
@@ -257,16 +283,22 @@ interface CreateBetParams {
   asset: string // e.g. "BTC/USD"
   participant1: string
   participant2: string
+  factoryAddress?: string // Optional: specify which factory to use
 }
 
 export async function createPredictionOnChain(
   params: CreateBetParams
 ): Promise<{ success: boolean; txHash?: string; error?: string }> {
   try {
-    const factoryAddr = getAddress(config.BET_FACTORY_ADDRESS)
+    // Determine which factory and clients to use
+    const isWorldChain = params.factoryAddress === config.WORLD_PREDICTION_FACTORY_ADDRESS
+    const factoryAddr = getAddress(params.factoryAddress || config.BET_FACTORY_ADDRESS)
+    const wallet = isWorldChain ? worldWalletClient : walletClient
+    const pubClient = isWorldChain ? worldPublicClient : publicClient
     const usdcAmount = parseUnits(params.amount, 6)
 
     console.log("🔗 Sending createPrediction tx:", {
+      chain: isWorldChain ? "World Chain Sepolia" : "Base Sepolia",
       factory: factoryAddr,
       token: params.token,
       amount: usdcAmount.toString(),
@@ -277,7 +309,7 @@ export async function createPredictionOnChain(
       operator: operatorAccount.address,
     })
 
-    const txHash = await walletClient.writeContract({
+    const txHash = await wallet.writeContract({
       address: factoryAddr,
       abi: BetFactoryAbi,
       functionName: "createPrediction",
@@ -294,7 +326,7 @@ export async function createPredictionOnChain(
     console.log("🔗 createPrediction tx sent:", txHash)
 
     // Wait for confirmation
-    const receipt = await publicClient.waitForTransactionReceipt({ hash: txHash })
+    const receipt = await pubClient.waitForTransactionReceipt({ hash: txHash })
     console.log("🔗 createPrediction confirmed in block", receipt.blockNumber)
 
     if (receipt.status === "reverted") {

@@ -1,7 +1,7 @@
 import express from "express"
 import cors from "cors"
 import { prisma } from "./db"
-import { getPriceFeed, createPredictionOnChain } from "./services/blockchain"
+import { getPriceFeed, createPredictionOnChain, publicClient } from "./services/blockchain"
 import { bot } from "./bot"
 import { config } from "./config"
 import {
@@ -109,6 +109,132 @@ app.get("/api/asset/:asset", async (req, res) => {
     const supported = feed !== "0x0000000000000000000000000000000000000000"
     res.json({ asset, supported, priceFeed: feed })
   } catch (err) {
+    res.status(500).json({ error: "Internal server error" })
+  }
+})
+
+// Create prediction (called from Mini App)
+app.post("/api/predictions/create", async (req, res) => {
+  try {
+    const { token, amount, duration, asset, participant1, participant2, factoryAddress } = req.body
+
+    // Validate required fields
+    if (!token || !amount || !duration || !asset || !participant1) {
+      res.status(400).json({ error: "Missing required fields" })
+      return
+    }
+
+    // Validate factory address if provided
+    if (factoryAddress && !/^0x[a-fA-F0-9]{40}$/.test(factoryAddress)) {
+      res.status(400).json({ error: "Invalid factory address" })
+      return
+    }
+
+    // Validate addresses
+    if (!/^0x[a-fA-F0-9]{40}$/.test(token)) {
+      res.status(400).json({ error: "Invalid token address" })
+      return
+    }
+    if (!/^0x[a-fA-F0-9]{40}$/.test(participant1)) {
+      res.status(400).json({ error: "Invalid participant1 address" })
+      return
+    }
+    if (participant2 && !/^0x[a-fA-F0-9]{40}$/.test(participant2)) {
+      res.status(400).json({ error: "Invalid participant2 address" })
+      return
+    }
+
+    // Validate amount
+    const amountNum = parseFloat(amount)
+    if (isNaN(amountNum) || amountNum <= 0) {
+      res.status(400).json({ error: "Invalid amount" })
+      return
+    }
+
+    // Validate duration
+    const durationNum = parseInt(duration)
+    if (isNaN(durationNum) || durationNum < 300 || durationNum > 604800) {
+      res.status(400).json({ error: "Duration must be between 300s and 604800s" })
+      return
+    }
+
+    // Check if asset is supported
+    const priceFeed = await getPriceFeed(asset)
+    if (priceFeed === "0x0000000000000000000000000000000000000000") {
+      res.status(400).json({ error: `Asset ${asset} is not supported` })
+      return
+    }
+
+    console.log("📝 Creating prediction:", {
+      token,
+      amount: amountNum,
+      duration: durationNum,
+      asset,
+      participant1,
+      participant2: participant2 || "0x0000000000000000000000000000000000000000",
+      factoryAddress: factoryAddress || "default",
+    })
+
+    // Create prediction on-chain
+    const result = await createPredictionOnChain({
+      token,
+      amount: String(amountNum),
+      duration: durationNum,
+      asset,
+      participant1,
+      participant2: participant2 || "0x0000000000000000000000000000000000000000",
+      factoryAddress,
+    })
+
+    if (!result.success) {
+      res.status(500).json({ error: result.error || "Failed to create prediction" })
+      return
+    }
+
+    // Determine which client to use for receipt parsing
+    const { worldPublicClient } = await import("./services/blockchain.js")
+    const clientToUse = factoryAddress === config.WORLD_PREDICTION_FACTORY_ADDRESS 
+      ? worldPublicClient 
+      : publicClient
+
+    // Parse transaction receipt to get betId and betContract
+    // The BetCreated event contains this info
+    const receipt = await clientToUse.getTransactionReceipt({ hash: result.txHash as `0x${string}` })
+    
+    let betId: number | undefined
+    let betContract: string | undefined
+
+    // Parse logs to find BetCreated event
+    for (const log of receipt.logs) {
+      try {
+        if (log.topics[0] === "0x8f5f6b8f5b8c8f5f6b8f5b8c8f5f6b8f5b8c8f5f6b8f5b8c8f5f6b8f5b8c8f5f") {
+          // This is a simplified check - in production, properly decode the event
+          betId = Number(log.topics[1])
+          betContract = `0x${log.data.slice(26, 66)}`
+        }
+      } catch (e) {
+        // Continue parsing other logs
+      }
+    }
+
+    // If we couldn't parse from logs, query the contract
+    if (!betId || !betContract) {
+      const { getBetCount, getBetAddress } = await import("./services/blockchain.js")
+      const betCount = await getBetCount()
+      betId = Number(betCount) - 1 // Latest bet ID
+      betContract = await getBetAddress(betId)
+    }
+
+    console.log("✅ Prediction created:", { betId, betContract, txHash: result.txHash })
+
+    res.json({
+      success: true,
+      betId,
+      betContract,
+      txHash: result.txHash,
+    })
+  } catch (err) {
+    console.error("Create prediction error:", err)
     res.status(500).json({ error: "Internal server error" })
   }
 })
