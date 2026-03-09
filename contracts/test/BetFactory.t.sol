@@ -51,10 +51,10 @@ contract BetFactoryTest is Test {
                         CREATE BET TESTS
     //////////////////////////////////////////////////////////////*/
 
-    function test_createBet() public {
+    function test_createPrediction() public {
         vm.prank(operator);
         (uint256 betId, address betContract) =
-            factory.createBet(address(token), BET_AMOUNT, BET_DURATION, "BTC/USD", alice, bob);
+            factory.createPrediction(address(token), BET_AMOUNT, BET_DURATION, "BTC/USD", alice, bob);
 
         assertEq(betId, 0);
         assertTrue(betContract != address(0));
@@ -72,19 +72,19 @@ contract BetFactoryTest is Test {
         assertEq(address(bet.priceFeed()), address(priceFeed));
     }
 
-    function test_createBet_ownerCanCreate() public {
+    function test_createPrediction_ownerCanCreate() public {
         vm.prank(owner);
         (uint256 betId,) =
-            factory.createBet(address(token), BET_AMOUNT, BET_DURATION, "BTC/USD", alice, bob);
+            factory.createPrediction(address(token), BET_AMOUNT, BET_DURATION, "BTC/USD", alice, bob);
         assertEq(betId, 0);
     }
 
-    function test_createBet_incrementsId() public {
+    function test_createPrediction_incrementsId() public {
         vm.startPrank(operator);
 
-        (uint256 id1,) = factory.createBet(address(token), BET_AMOUNT, BET_DURATION, "BTC/USD", alice, bob);
+        (uint256 id1,) = factory.createPrediction(address(token), BET_AMOUNT, BET_DURATION, "BTC/USD", alice, bob);
         (uint256 id2,) =
-            factory.createBet(address(token), BET_AMOUNT, BET_DURATION, "BTC/USD", alice, charlie);
+            factory.createPrediction(address(token), BET_AMOUNT, BET_DURATION, "BTC/USD", alice, charlie);
 
         assertEq(id1, 0);
         assertEq(id2, 1);
@@ -92,68 +92,68 @@ contract BetFactoryTest is Test {
         vm.stopPrank();
     }
 
-    function test_createBet_emitsEvent() public {
+    function test_createPrediction_emitsEvent() public {
         vm.prank(operator);
 
         vm.expectEmit(true, false, false, false);
         emit IBetFactory.BetCreated(0, address(0), alice, bob, address(token), "BTC/USD");
 
-        factory.createBet(address(token), BET_AMOUNT, BET_DURATION, "BTC/USD", alice, bob);
+        factory.createPrediction(address(token), BET_AMOUNT, BET_DURATION, "BTC/USD", alice, bob);
     }
 
-    function test_createBet_revertNotAuthorized() public {
+    function test_createPrediction_revertNotAuthorized() public {
         vm.expectRevert(IBetFactory.NotAuthorized.selector);
         vm.prank(charlie);
-        factory.createBet(address(token), BET_AMOUNT, BET_DURATION, "BTC/USD", alice, bob);
+        factory.createPrediction(address(token), BET_AMOUNT, BET_DURATION, "BTC/USD", alice, bob);
     }
 
-    function test_createBet_revertZeroParticipant1() public {
+    function test_createPrediction_revertZeroParticipant1() public {
         vm.expectRevert(IBetFactory.InvalidParticipants.selector);
         vm.prank(operator);
-        factory.createBet(address(token), BET_AMOUNT, BET_DURATION, "BTC/USD", address(0), bob);
+        factory.createPrediction(address(token), BET_AMOUNT, BET_DURATION, "BTC/USD", address(0), bob);
     }
 
-    function test_createBet_revertZeroParticipant2() public {
+    function test_createPrediction_revertZeroParticipant2() public {
         vm.expectRevert(IBetFactory.InvalidParticipants.selector);
         vm.prank(operator);
-        factory.createBet(address(token), BET_AMOUNT, BET_DURATION, "BTC/USD", alice, address(0));
+        factory.createPrediction(address(token), BET_AMOUNT, BET_DURATION, "BTC/USD", alice, address(0));
     }
 
-    function test_createBet_revertSameParticipants() public {
+    function test_createPrediction_revertSameParticipants() public {
         vm.expectRevert(IBetFactory.InvalidParticipants.selector);
         vm.prank(operator);
-        factory.createBet(address(token), BET_AMOUNT, BET_DURATION, "BTC/USD", alice, alice);
+        factory.createPrediction(address(token), BET_AMOUNT, BET_DURATION, "BTC/USD", alice, alice);
     }
 
-    function test_createBet_revertZeroAmount() public {
+    function test_createPrediction_revertZeroAmount() public {
         vm.expectRevert(IBetFactory.InvalidAmount.selector);
         vm.prank(operator);
-        factory.createBet(address(token), 0, BET_DURATION, "BTC/USD", alice, bob);
+        factory.createPrediction(address(token), 0, BET_DURATION, "BTC/USD", alice, bob);
     }
 
-    function test_createBet_revertDurationTooShort() public {
+    function test_createPrediction_revertDurationTooShort() public {
         vm.expectRevert(IBetFactory.InvalidDuration.selector);
         vm.prank(operator);
-        factory.createBet(address(token), BET_AMOUNT, 60, "BTC/USD", alice, bob); // 1 min < 3 min
+        factory.createPrediction(address(token), BET_AMOUNT, 60, "BTC/USD", alice, bob); // 1 min < 3 min
     }
 
-    function test_createBet_revertDurationTooLong() public {
+    function test_createPrediction_revertDurationTooLong() public {
         vm.expectRevert(IBetFactory.InvalidDuration.selector);
         vm.prank(operator);
-        factory.createBet(address(token), BET_AMOUNT, 604801, "BTC/USD", alice, bob); // > 7 days
+        factory.createPrediction(address(token), BET_AMOUNT, 604801, "BTC/USD", alice, bob); // > 7 days
     }
 
-    function test_createBet_revertUnsupportedAsset() public {
+    function test_createPrediction_revertUnsupportedAsset() public {
         vm.expectRevert(IBetFactory.UnsupportedAsset.selector);
         vm.prank(operator);
-        factory.createBet(address(token), BET_AMOUNT, BET_DURATION, "DOGE/USD", alice, bob);
+        factory.createPrediction(address(token), BET_AMOUNT, BET_DURATION, "DOGE/USD", alice, bob);
     }
 
-    function test_createBet_revertUnsupportedToken() public {
+    function test_createPrediction_revertUnsupportedToken() public {
         MockERC20 unsupported = new MockERC20("Bad", "BAD", 18);
         vm.expectRevert(IBetFactory.InvalidToken.selector);
         vm.prank(operator);
-        factory.createBet(address(unsupported), BET_AMOUNT, BET_DURATION, "BTC/USD", alice, bob);
+        factory.createPrediction(address(unsupported), BET_AMOUNT, BET_DURATION, "BTC/USD", alice, bob);
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -354,14 +354,14 @@ contract BetFactoryTest is Test {
         assertEq(factory.feeRecipient(), address(0));
     }
 
-    function test_createBet_passesFeeToBet() public {
+    function test_createPrediction_passesFeeToBet() public {
         address feeCollector = makeAddr("feeCollector");
         vm.prank(owner);
         factory.setFee(300, feeCollector);
 
         vm.prank(operator);
         (, address betContract) =
-            factory.createBet(address(token), BET_AMOUNT, BET_DURATION, "BTC/USD", alice, bob);
+            factory.createPrediction(address(token), BET_AMOUNT, BET_DURATION, "BTC/USD", alice, bob);
 
         Bet bet = Bet(betContract);
         assertEq(bet.feeBps(), 300);
@@ -381,7 +381,7 @@ contract BetFactoryTest is Test {
         // Create bet
         vm.prank(operator);
         (uint256 betId, address betContract) =
-            factory.createBet(address(token), BET_AMOUNT, BET_DURATION, "BTC/USD", alice, bob);
+            factory.createPrediction(address(token), BET_AMOUNT, BET_DURATION, "BTC/USD", alice, bob);
 
         Bet bet = Bet(betContract);
 

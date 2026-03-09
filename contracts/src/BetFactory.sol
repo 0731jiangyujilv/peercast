@@ -84,7 +84,7 @@ contract BetFactory is IBetFactory, Ownable {
     /// @param participant2 Second participant (DOWN side)
     /// @return betId The unique ID assigned to this bet
     /// @return betContract The deployed Bet contract address
-    function createBet(
+    function createPrediction(
         address token,
         uint256 amount,
         uint256 duration,

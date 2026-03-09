@@ -94,7 +94,7 @@ bot.command("mybets", async (ctx) => {
     return
   }
 
-  const lines = ["📋 *Your Active Bets:*", ""]
+  const lines = ["📋 *Your Active Predictions:*", ""]
   for (const bet of bets) {
     const statusEmoji =
       bet.status === "PROPOSED" ? "📝" :
@@ -147,8 +147,8 @@ bot.command("ranking", async (ctx) => {
   )
 })
 
-// --- /bet or natural language ---
-bot.command("bet", handleBetCommand)
+// --- /bet, /peercast, or natural language ---
+bot.command("peercast", handleBetCommand)
 bot.on("text", async (ctx) => {
   const text = ctx.message.text
   console.log("text", text)
@@ -226,10 +226,10 @@ bot.on("callback_query", async (ctx) => {
 
 async function handleBetCommand(ctx: Context) {
   const text = (ctx.message as any)?.text as string
-  const parts = text.replace("/bet", "").trim()
+  const parts = text.replace(/^\/(bet|peercast)(@\w+)?/i, "").trim()
   if (!parts) {
     await ctx.replyWithMarkdown(
-      "Please describe your bet, e.g.:\n`/bet bet @alice 100 BTC 5m up`"
+      "Please describe your prediction, e.g.:\n`/peercast @alice 100 BTC 5m up`"
     )
     return
   }
@@ -238,7 +238,7 @@ async function handleBetCommand(ctx: Context) {
 }
 
 async function processBetMessage(ctx: Context, text: string, mentionedUsers: MentionedUser[] = []) {
-  const thinking = await ctx.reply("🤖 Analyzing your bet intent...")
+  const thinking = await ctx.reply("🤖 Analyzing your prediction intent...")
 
   const intent = await parseBetIntent(text)
 
@@ -274,7 +274,7 @@ async function processBetMessage(ctx: Context, text: string, mentionedUsers: Men
     let msg = parseConfirmMessage(intent)
     if (missing.length > 0) {
       msg += `\n\n❌ Missing info: ${missing.join(", ")}`
-      msg += "\n\nPlease try again, e.g.:\n`bet @alice 100 BTC 5m up`"
+      msg += "\n\nPlease try again, e.g.:\n`peercast @alice 100 BTC 5m up`"
     }
 
     await ctx.telegram.editMessageText(
@@ -328,7 +328,7 @@ async function processBetMessage(ctx: Context, text: string, mentionedUsers: Men
     ctx.chat!.id,
     thinking.message_id,
     undefined,
-    confirmMsg + "\n\nConfirm this bet?",
+    confirmMsg + "\n\nConfirm this prediction?",
     {
       parse_mode: "Markdown",
       ...Markup.inlineKeyboard([
@@ -395,7 +395,7 @@ async function handleAcceptBet(ctx: Context, data: string) {
 
   // Ensure the acceptor is not the creator
   if (BigInt(acceptor.id) === bet.p1TgId) {
-    await ctx.answerCbQuery("You cannot accept your own bet!")
+    await ctx.answerCbQuery("You cannot accept your own prediction!")
     return
   }
 
@@ -427,7 +427,7 @@ async function handleAcceptBet(ctx: Context, data: string) {
 
   await ctx.editMessageText(
     [
-      "✅ *Bet Accepted!*",
+      "✅ *Prediction Accepted!*",
       "",
       `👤 @${creatorName} (${dirP1}) vs @${acceptorName} (${dirP2})`,
       `📊 ${bet.asset} | 💰 ${bet.amount} USDC | ⏱ ${formatDuration(bet.duration)}`,
@@ -455,11 +455,11 @@ async function handleRejectBet(ctx: Context, data: string) {
     data: { status: "CANCELLED" },
   })
 
-  await ctx.editMessageText("❌ Bet rejected.")
+  await ctx.editMessageText("❌ Prediction rejected.")
 }
 
 async function handleCancelProposal(ctx: Context) {
-  await ctx.editMessageText("❌ Bet cancelled.")
+  await ctx.editMessageText("❌ Prediction cancelled.")
 }
 
 // --- Utils ---

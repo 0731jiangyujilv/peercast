@@ -1,123 +1,123 @@
 # Chatutu Proof of Reserve (PoR)
 
-基于 Chainlink CRE 的 Chatutu 赌局平台储备证明系统。
+A Chainlink CRE-based Proof of Reserve system for the Chatutu betting platform.
 
-## 功能
+## Features
 
-- ✅ 定期验证链上和链下数据一致性
-- ✅ 获取平台统计数据（总赌局数、活跃赌局、已结算赌局等）
-- ✅ 获取盈利排行榜数据（使用 TG username）
-- ✅ 将验证结果写入链上 PoR 合约
-- ✅ 提供历史验证记录查询
+- ✅ Periodic verification of on-chain and off-chain data consistency
+- ✅ Fetches platform stats (total bets, active bets, settled bets, etc.)
+- ✅ Fetches profit leaderboard data (using TG usernames)
+- ✅ Writes verification results to the on-chain PoR contract
+- ✅ Provides historical verification record queries
 
-## 架构
+## Architecture
 
 ```
-定时触发 (Cron: 每10分钟)
+Scheduled Trigger (Cron: every 10 minutes)
     ↓
-1. 获取链下数据 (HTTP)
-   - Bot API: /api/stats (统计数据)
-   - Bot API: /api/stats/leaderboard (排行榜)
+1. Fetch off-chain data (HTTP)
+   - Bot API: /api/stats (stats)
+   - Bot API: /api/stats/leaderboard (leaderboard)
     ↓
-2. 获取链上数据 (EVM Read)
-   - BetFactory.getBetCount() (总赌局数)
+2. Fetch on-chain data (EVM Read)
+   - BetFactory.getBetCount() (total bets)
     ↓
-3. 验证数据一致性
-   - 对比链上和链下的总赌局数
+3. Verify data consistency
+   - Compare on-chain and off-chain total bet counts
     ↓
-4. 写入链上 (EVM Write)
-   - ChatutuPoR 合约存储验证结果
+4. Write on-chain (EVM Write)
+   - ChatutuPoR contract stores verification results
 ```
 
-## 数据结构
+## Data Structures
 
-### PoR 合约存储的数据
+### Data stored in the PoR contract
 
 ```solidity
 struct PoRData {
-    uint256 totalBets;        // 总赌局数
-    uint256 activeBets;       // 活跃赌局数
-    uint256 settledBets;      // 已结算赌局数
-    uint256 totalVolume;      // 总交易量 (wei)
-    uint256 topPlayerProfit;  // 榜首玩家盈利 (wei)
-    bool isValid;             // 数据是否验证通过
-    uint256 timestamp;        // 验证时间戳
-    uint256 updateCount;      // 更新次数
+    uint256 totalBets;        // Total bet count
+    uint256 activeBets;       // Active bet count
+    uint256 settledBets;      // Settled bet count
+    uint256 totalVolume;      // Total volume (wei)
+    uint256 topPlayerProfit;  // Top player profit (wei)
+    bool isValid;             // Whether data verification passed
+    uint256 timestamp;        // Verification timestamp
+    uint256 updateCount;      // Update count
 }
 ```
 
-## 安装
+## Installation
 
-### 1. 安装依赖
+### 1. Install dependencies
 
 ```bash
 cd chatutu-por/por
 bun install
 ```
 
-### 2. 配置环境变量
+### 2. Configure environment variables
 
 ```bash
 cp .env.sample .env
 ```
 
-编辑 `.env` 文件，设置：
-- `CRE_ETH_PRIVATE_KEY`: 用于 EVM 写入的私钥
-- `BOT_API_URL`: Bot API 地址（本地测试用）
+Edit `.env` and set:
+- `CRE_ETH_PRIVATE_KEY`: Private key for EVM writes
+- `BOT_API_URL`: Bot API URL (for local testing)
 
-### 3. 更新配置
+### 3. Update config
 
-编辑 `por/config.staging.json`，设置：
-- `botApiUrl`: Bot API 地址
-- `evms[0].porAddress`: 已部署的 ChatutuPoR 合约地址
-- `evms[0].betFactoryAddress`: BetFactory 合约地址
+Edit `por/config.staging.json` and set:
+- `botApiUrl`: Bot API URL
+- `evms[0].porAddress`: Deployed ChatutuPoR contract address
+- `evms[0].betFactoryAddress`: BetFactory contract address
 
-## 使用
+## Usage
 
-### 本地模拟（不发送真实交易）
+### Local simulation (no real transactions)
 
 ```bash
 cd chatutu-por
 cre workflow simulate por
 ```
 
-### 本地模拟（发送真实交易）
+### Local simulation (broadcast real transactions)
 
 ```bash
 cre workflow simulate por --broadcast
 ```
 
-### 部署到生产环境
+### Deploy to production
 
 ```bash
-# 1. 设置生产环境配置
-# 编辑 por/config.production.json
+# 1. Set production config
+# Edit por/config.production.json
 
-# 2. 部署工作流
+# 2. Deploy workflow
 cre workflow deploy por --target production-settings
 
-# 3. 设置 secrets
+# 3. Set secrets
 cre secret set BOT_API_URL https://your-production-api.com
 ```
 
-## 合约部署
+## Contract Deployment
 
-### 1. 部署 ChatutuPoR 合约
+### 1. Deploy ChatutuPoR
 
 ```bash
 cd ../../contracts
 
-# 部署到 Base Sepolia
+# Deploy to Base Sepolia
 forge create src/ChatutuPoR.sol:ChatutuPoR \
   --rpc-url $BASE_SEPOLIA_RPC_URL \
   --private-key $PRIVATE_KEY \
   --constructor-args <FORWARDER_ADDRESS>
 ```
 
-**Forwarder 地址：**
-- Base Sepolia Testnet: `0x...` (查看 [CRE 文档](https://docs.chain.link/cre/guides/workflow/using-evm-client/forwarder-directory-ts))
+**Forwarder address:**
+- Base Sepolia Testnet: `0x...` (see [CRE docs](https://docs.chain.link/cre/guides/workflow/using-evm-client/forwarder-directory-ts))
 
-### 2. 验证合约
+### 2. Verify contract
 
 ```bash
 forge verify-contract \
@@ -128,16 +128,16 @@ forge verify-contract \
   --constructor-args $(cast abi-encode "constructor(address)" <FORWARDER_ADDRESS>)
 ```
 
-## API 端点
+## API Endpoints
 
-Bot 需要提供以下 API 端点：
+The bot must expose the following endpoints:
 
-### 1. 统计数据
+### 1. Stats
 ```
 GET /api/stats
 ```
 
-响应：
+Response:
 ```json
 {
   "activeBetsCount": 10,
@@ -148,12 +148,12 @@ GET /api/stats
 }
 ```
 
-### 2. 排行榜
+### 2. Leaderboard
 ```
 GET /api/stats/leaderboard?limit=10
 ```
 
-响应：
+Response:
 ```json
 [
   {
@@ -167,22 +167,22 @@ GET /api/stats/leaderboard?limit=10
 ]
 ```
 
-## 监控
+## Monitoring
 
-### 查看最新 PoR 数据
+### Get latest PoR data
 
 ```solidity
-// 调用 ChatutuPoR 合约
+// Call the ChatutuPoR contract
 function getLatestData() external view returns (PoRData memory)
 ```
 
-### 查看历史数据
+### Get historical data
 
 ```solidity
 function getHistoricalData(uint256 updateId) external view returns (PoRData memory)
 ```
 
-### 事件监听
+### Event listening
 
 ```solidity
 event PoRUpdated(
@@ -197,25 +197,25 @@ event PoRUpdated(
 )
 ```
 
-## 故障排除
+## Troubleshooting
 
-### 数据不一致
+### Data mismatch
 
-如果 `isValid = false`，检查：
-1. Bot 数据库是否与链上数据同步
-2. BetFactory 合约地址是否正确
-3. Bot API 是否正常返回数据
+If `isValid = false`, check:
+1. Whether the bot database is in sync with on-chain data
+2. Whether the BetFactory contract address is correct
+3. Whether the Bot API returns data correctly
 
-### 工作流执行失败
+### Workflow execution failed
 
-检查：
-1. Bot API 是否可访问
-2. 合约地址是否正确
-3. Gas limit 是否足够
-4. Forwarder 地址是否正确
+Check:
+1. Whether the Bot API is reachable
+2. Whether the contract addresses are correct
+3. Whether the gas limit is sufficient
+4. Whether the Forwarder address is correct
 
-## 相关资源
+## Related Resources
 
-- [Chainlink CRE 文档](https://docs.chain.link/cre)
-- [CRE PoR 示例](https://github.com/Nalon/cre-por-llm-demo)
-- [Chatutu 项目文档](../README.md)
+- [Chainlink CRE docs](https://docs.chain.link/cre)
+- [CRE PoR example](https://github.com/Nalon/cre-por-llm-demo)
+- [Chatutu project docs](../README.md)

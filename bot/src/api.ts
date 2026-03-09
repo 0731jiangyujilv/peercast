@@ -1,7 +1,7 @@
 import express from "express"
 import cors from "cors"
 import { prisma } from "./db"
-import { getPriceFeed, createBetOnChain } from "./services/blockchain"
+import { getPriceFeed, createPredictionOnChain } from "./services/blockchain"
 import { bot } from "./bot"
 import { config } from "./config"
 import {
@@ -40,7 +40,7 @@ app.get("/api/stats/active", async (_req, res) => {
     const { bets, totalWagered } = await getActiveBetsWithWagers()
     res.json({ bets, totalWagered })
   } catch (err) {
-    console.error("Active bets error:", err)
+    console.error("Active predictions error:", err)
     res.status(500).json({ error: "Internal server error" })
   }
 })
@@ -76,7 +76,7 @@ app.get("/api/bet/:id", async (req, res) => {
       where: { id: parseInt(req.params.id) },
     })
     if (!bet) {
-      res.status(404).json({ error: "Bet not found" })
+      res.status(404).json({ error: "Prediction not found" })
       return
     }
     // Serialize BigInt fields to string
@@ -119,7 +119,7 @@ app.post("/api/webhook/settlement", async (req, res) => {
     const { betId, contractAddress, status, winner, txHash } = req.body
 
     if (!betId && !contractAddress) {
-      res.status(400).json({ error: "betId or contractAddress required" })
+      res.status(400).json({ error: "Prediction ID or contractAddress required" })
       return
     }
 
@@ -129,7 +129,7 @@ app.post("/api/webhook/settlement", async (req, res) => {
 
     const bet = await prisma.bet.findFirst({ where })
     if (!bet) {
-      res.status(404).json({ error: "Bet not found" })
+      res.status(404).json({ error: "Prediction not found" })
       return
     }
 
@@ -170,11 +170,11 @@ app.get("/api/bet/:id/register-wallet", async (req, res) => {
 
     const bet = await prisma.bet.findUnique({ where: { id: betId } })
     if (!bet) {
-      res.status(404).json({ error: "Bet not found" })
+      res.status(404).json({ error: "Prediction not found" })
       return
     }
     if (bet.status !== "ACCEPTED") {
-      res.status(400).json({ error: `Bet is not in ACCEPTED state (current: ${bet.status})` })
+      res.status(400).json({ error: `Prediction is not in ACCEPTED state (current: ${bet.status})` })
       return
     }
 
@@ -193,7 +193,7 @@ app.get("/api/bet/:id/register-wallet", async (req, res) => {
       betStatus: bet.status,
     })
     if (!isP1 && !isP2) {
-      res.status(403).json({ error: "You are not a participant in this bet" })
+      res.status(403).json({ error: "You are not a participant in this prediction" })
       return
     }
 
@@ -221,12 +221,12 @@ app.get("/api/bet/:id/register-wallet", async (req, res) => {
     const username = user?.username || String(tgId)
 
     if (updatedBet && updatedBet.p1Address && updatedBet.p2Address) {
-      // Both wallets registered — create bet on-chain
+      // Both wallets registered — create prediction on-chain
       res.json({ success: true, bothRegistered: true, creating: true })
 
-      // Fire and forget: create on-chain bet and update Telegram
+      // Fire and forget: create on-chain prediction and update Telegram
       handleBothWalletsRegistered(updatedBet).catch((err) =>
-        console.error("Failed to create on-chain bet after wallet registration:", err)
+        console.error("Failed to create on-chain prediction after wallet registration:", err)
       )
     } else {
       // Notify group: first player registered, waiting for the other
@@ -266,7 +266,7 @@ async function handleBothWalletsRegistered(bet: any) {
       Number(bet.messageId),
       undefined,
       [
-        "✅ *Bet Accepted — Wallets Linked!*",
+        "✅ *Prediction Accepted — Wallets Linked!*",
         "",
         `👤 @${creatorName} (${dirP1}) vs @${acceptorName} (${dirP2})`,
         `📊 ${bet.asset} | 💰 ${bet.amount} USDC | ⏱ ${formatDuration(bet.duration)}`,
@@ -277,7 +277,7 @@ async function handleBothWalletsRegistered(bet: any) {
     )
   } catch (_) {}
 
-  const result = await createBetOnChain({
+  const result = await createPredictionOnChain({
     token: USDC_ADDRESS,
     amount: String(bet.amount),
     duration: bet.duration,
@@ -293,7 +293,7 @@ async function handleBothWalletsRegistered(bet: any) {
         Number(bet.messageId),
         undefined,
         [
-          "❌ *Failed to create on-chain bet*",
+          "❌ *Failed to create on-chain prediction*",
           "",
           `Error: ${result.error}`,
           "",

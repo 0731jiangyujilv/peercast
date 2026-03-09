@@ -2,20 +2,20 @@ import type { ParsedBetIntent } from "./services/openai"
 
 export function welcomeMessage(): string {
   return [
-    "🎲 *Chatutu — 1v1 Crypto Betting*",
+    "🎲 *PeerCast — 1v1 Crypto Prediction*",
     "",
-    "Instant crypto price bets in group chats!",
+    "Instant crypto price predictions in group chats!",
     "",
-    "📝 *Create a bet:*",
-    "Mention me with your bet description, e.g.:",
-    '`@chatutu_bot bet @alice 100 BTC 5m up`',
-    '`@chatutu_bot bet @bob 50 LINK 1h down`',
+    "📝 *Create a prediction:*",
+    "Mention me with your prediction description, e.g.:",
+    '`@chatutu_bot peercast @alice 100 BTC 5m up`',
+    '`@chatutu_bot peercast @bob 50 LINK 1h down`',
     "",
     "📋 *Commands:*",
     "/start — Welcome",
     "/stat — Statistics",
-    "/rules — Betting rules",
-    "/mybets — My active bets",
+    "/rules — Prediction rules",
+    "/mybets — My active predictions",
     "/help — Help",
     "",
     "⚡ Powered by Chainlink Data Feeds",
@@ -24,7 +24,7 @@ export function welcomeMessage(): string {
 
 export function rulesMessage(): string {
   return [
-    "📜 *Betting Rules*",
+    "📜 *Prediction Rules*",
     "",
     "1️⃣ *Supported assets:* BTC/USD, LINK/USD",
     "2️⃣ *Wager token:* USDC",
@@ -32,7 +32,7 @@ export function rulesMessage(): string {
     "4️⃣ *Direction:* Creator picks UP or DOWN",
     "",
     "🔄 *Flow:*",
-    "1. Creator proposes a bet",
+    "1. Creator proposes a prediction",
     "2. Opponent accepts the challenge",
     "3. Both deposit wager on-chain",
     "4. Chainlink records the start price",
@@ -52,15 +52,15 @@ export function helpMessage(): string {
   return [
     "❓ *Help*",
     "",
-    "🗣 *Natural language bets:*",
-    "Mention me in a group chat with your bet description:",
-    "/mybets — View your active bets",
+    "🗣 *Natural language predictions:*",
+    "Mention me in a group chat with your prediction description:",
+    "/mybets — View your active predictions",
     "/help — Show this help",
     "",
     "*Statistics Commands:*",
     "/stats — Platform statistics",
-    "/activebets — Current active bets",
-    "/history — Historical bet results",
+    "/activebets — Current active predictions",
+    "/history — Historical prediction results",
     "/ranking — Profit leaderboard (verified by Chainlink PoR)",
     "",
     "🔗 *Web Interface:*",
@@ -75,7 +75,7 @@ export function betProposalMessage(
 ): string {
   const dir = intent.direction === "UP" ? "📈 UP" : "📉 DOWN"
   return [
-    "🎯 *New Bet Proposal*",
+    "🎯 *New Prediction Proposal*",
     "",
     `👤 Creator: @${creatorUsername} (${dir})`,
     `👤 Opponent: @${opponentUsername} (${intent.direction === "UP" ? "📉 DOWN" : "📈 UP"})`,
@@ -94,7 +94,7 @@ export function betAcceptedMessage(
   amount: number
 ): string {
   return [
-    "✅ *Bet Accepted!*",
+    "✅ *Prediction Accepted!*",
     "",
     `👤 ${creatorUsername} vs ${opponentUsername}`,
     `📊 ${asset} | 💰 ${amount} USDC`,
@@ -109,7 +109,7 @@ export function betLockedMessage(
   endTimeStr: string
 ): string {
   return [
-    "🔒 *Bet Locked!*",
+    "🔒 *Prediction Locked!*",
     "",
     `📊 Asset: ${asset}`,
     `💹 Start price: $${startPrice}`,
@@ -127,7 +127,7 @@ export function betSettledMessage(
   amount: number
 ): string {
   return [
-    "🏆 *Bet Settled!*",
+    "🏆 *Prediction Settled!*",
     "",
     `🎉 Winner: @${winnerUsername}`,
     `💰 Won: ${amount * 2} USDC`,
@@ -162,7 +162,7 @@ export function parseConfirmMessage(intent: ParsedBetIntent): string {
 }
 
 export function noBetsMessage(): string {
-  return "📭 You have no active bets."
+  return "📭 You have no active predictions."
 }
 
 export function statsMessage(
@@ -175,10 +175,10 @@ export function statsMessage(
   return [
     "📊 *Platform Statistics*",
     "",
-    `🎲 Active Bets: ${activeBets}`,
-    `📈 Total Bets: ${totalBets}`,
+    `🎲 Active predictions: ${activeBets}`,
+    `📈 Total predictions: ${totalBets}`,
     `💰 Total Volume: ${parseFloat(totalVolume).toFixed(2)} USDC`,
-    `✅ Settled Bets: ${settledBets}`,
+    `✅ Settled predictions: ${settledBets}`,
     "",
     `🌐 [View detailed stats](${webappUrl}/stats)`,
   ].join("\n")
@@ -190,11 +190,11 @@ export function activeBetsMessage(
   webappUrl: string
 ): string {
   if (bets.length === 0) {
-    return "📭 No active bets at the moment."
+    return "📭 No active predictions at the moment."
   }
 
   const lines = [
-    "🎲 *Active Bets*",
+    "🎲 *Active Predictions*",
     "",
     `💰 Total Wagered: ${totalWagered} USDC`,
     "",
@@ -220,7 +220,7 @@ export function activeBetsMessage(
   }
 
   lines.push("")
-  lines.push(`🌐 [View all active bets](${webappUrl}/stats)`)
+  lines.push(`🌐 [View all active predictions](${webappUrl}/stats)`)
 
   return lines.join("\n")
 }
@@ -240,11 +240,11 @@ export function historyMessage(
   webappUrl: string
 ): string {
   if (bets.length === 0) {
-    return "📭 No historical bets found."
+    return "📭 No historical predictions found."
   }
 
   const lines = [
-    "📜 *Bet History*",
+    "📜 *Prediction History*",
     "",
   ]
 

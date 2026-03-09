@@ -1,7 +1,7 @@
 {
-  "name": "chatutu",
+  "name": "peercast",
   "version": "0.1.0",
-  "description": "Chatutu (chat you to you) — 1v1 Betting Telegram Bot with Chainlink Integration",
+  "description": "PeerCast — 1v1 Crypto PeerCast Telegram Bot with Chainlink Integration",
   "private": true,
   "scripts": {
     "dev": "pm2 start ecosystem.config.js",
@@ -17,7 +17,7 @@
     "contracts:test:gas": "cd contracts && forge test --gas-report",
     "contracts:fmt": "cd contracts && forge fmt",
     "contracts:snapshot": "cd contracts && forge snapshot",
-    "contracts:deploy:base-sepolia": "cd contracts && source .env && forge script script/DeployBetFactory.s.sol --rpc-url $BASE_SEPOLIA_RPC_URL --broadcast --chain-id 84532",
+    "contracts:deploy:base-sepolia": "cd contracts && source .env && forge script script/DeployBetFactory.s.sol --rpc-url $BASE_SEPOLIA_RPC_URL --verify --broadcast --chain-id 84532",
     "contracts:verify": "cd contracts && source .env && forge verify-contract --chain-id 84532 --verifier-url 'https://api.etherscan.io/v2/api?chainid=84532' --etherscan-api-key $BASESCAN_API_KEY",
     "cre:install": "cd cre-workflows/bet-creation && bun install && bun x cre-setup && cd ../bet-settlement && bun install && bun x cre-setup",
     "cre:simulate:bet-creation": "cd cre-workflows && cre workflow simulate bet-creation --target staging-settings",
@@ -33,3 +33,4 @@
     "bot:db:studio": "cd bot && npx prisma studio"
   }
 }
+

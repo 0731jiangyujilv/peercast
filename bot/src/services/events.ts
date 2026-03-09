@@ -125,7 +125,7 @@ async function handleBetCreated(log: any) {
 
   // Register Chainlink Automation upkeep (async, non-blocking)
   try {
-    const betLabel = `Bet #${onChainBetId} (${asset})`
+    const betLabel = `PeerCast #${onChainBetId} (${asset})`
     const result = await registerAutomationUpkeep(contractAddr, betLabel)
     if (result.success) {
       console.log(`⚡ Automation upkeep registered for ${contractAddr}`)
@@ -193,12 +193,12 @@ async function updateTelegramBetCreated(dbBetId: number, contractAddress: string
       Number(bet.messageId),
       undefined,
       [
-        "📄 *Bet Created On-Chain!*",
+        "📄 *Prediction Created On-Chain!*",
         "",
         `👤 @${p1Name} (${bet.direction === "UP" ? "📈 UP" : "📉 DOWN"}) vs @${p2Name} (${bet.direction === "UP" ? "📉 DOWN" : "📈 UP"})`,
         `📊 ${bet.asset} | 💰 ${bet.amount} USDC | ⏱ ${formatDurationShort(bet.duration)}`,
         "",
-        "� Both players: tap below to deposit your wager.",
+        "👉 Both players: tap below to deposit your wager.",
         "⏰ Deposit timeout: 30 min",
       ].join("\n"),
       {
@@ -337,7 +337,7 @@ async function updateTelegramDeposit(dbBetId: number, p1Deposited: boolean, p2De
     `📊 ${bet.asset} | 💰 ${bet.amount} USDC`,
     "",
     bothDone
-      ? "🔒 Both deposited! Locking bet..."
+      ? "🔒 Both deposited! Locking prediction..."
       : "⏳ Waiting for both players to deposit...",
   ].join("\n")
 
@@ -491,7 +491,7 @@ async function handleBetCancelled(dbBetId: number) {
         Number(bet.chatId),
         Number(bet.messageId),
         undefined,
-        "❌ *Bet Cancelled*\n\nDeposited funds have been refunded.",
+        "❌ *Prediction Cancelled*\n\nDeposited funds have been refunded.",
         { parse_mode: "Markdown" }
       )
     } catch (err) {
@@ -504,7 +504,7 @@ async function handleBetCancelled(dbBetId: number) {
     await bot.telegram.sendMessage(
       Number(bet.chatId),
       [
-        "❌ *Bet Cancelled — Deposit Timeout*",
+        "❌ *Prediction Cancelled — Deposit Timeout*",
         "",
         `📊 ${bet.asset} | 💰 ${bet.amount} USDC`,
         `@${p1Name}: ${p1Status}`,
@@ -519,7 +519,7 @@ async function handleBetCancelled(dbBetId: number) {
     try {
       await bot.telegram.sendMessage(
         Number(bet.chatId),
-        `❌ Bet Cancelled — Deposit Timeout\n\n📊 ${bet.asset} | 💰 ${bet.amount} USDC\n@${p1Name}: ${p1Status}\n@${p2Name}: ${p2Status}\n\n💸 All deposited funds have been refunded on-chain.`
+        `❌ Prediction Cancelled — Deposit Timeout\n\n📊 ${bet.asset} | 💰 ${bet.amount} USDC\n@${p1Name}: ${p1Status}\n@${p2Name}: ${p2Status}\n\n💸 All deposited funds have been refunded on-chain.`
       )
     } catch (__) {}
   }

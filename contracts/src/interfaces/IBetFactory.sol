@@ -16,7 +16,7 @@ interface IBetFactory {
     error InvalidToken();
     error NotAuthorized();
 
-    function createBet(
+    function createPrediction(
         address token,
         uint256 amount,
         uint256 duration,

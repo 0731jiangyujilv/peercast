@@ -111,7 +111,7 @@ export async function registerAutomationUpkeep(
           gasLimit: 500_000,
           triggerType: 0,             // Conditional (checkUpkeep-based)
           billingToken: LINK_TOKEN,   // pay in LINK
-          name: `Chatutu: ${betName}`,
+          name: `PeerCast: ${betName}`,
           encryptedEmail: "0x" as `0x${string}`,
           checkData: "0x" as `0x${string}`,
           triggerConfig: "0x" as `0x${string}`,

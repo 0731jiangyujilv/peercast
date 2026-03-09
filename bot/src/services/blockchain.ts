@@ -23,7 +23,7 @@ export const publicClient = createPublicClient({
 export const BetFactoryAbi = [
   {
     type: "function",
-    name: "createBet",
+    name: "createPrediction",
     inputs: [
       { name: "token", type: "address" },
       { name: "amount", type: "uint256" },
@@ -259,14 +259,14 @@ interface CreateBetParams {
   participant2: string
 }
 
-export async function createBetOnChain(
+export async function createPredictionOnChain(
   params: CreateBetParams
 ): Promise<{ success: boolean; txHash?: string; error?: string }> {
   try {
     const factoryAddr = getAddress(config.BET_FACTORY_ADDRESS)
     const usdcAmount = parseUnits(params.amount, 6)
 
-    console.log("🔗 Sending createBet tx:", {
+    console.log("🔗 Sending createPrediction tx:", {
       factory: factoryAddr,
       token: params.token,
       amount: usdcAmount.toString(),
@@ -280,7 +280,7 @@ export async function createBetOnChain(
     const txHash = await walletClient.writeContract({
       address: factoryAddr,
       abi: BetFactoryAbi,
-      functionName: "createBet",
+      functionName: "createPrediction",
       args: [
         getAddress(params.token),
         usdcAmount,
@@ -291,11 +291,11 @@ export async function createBetOnChain(
       ],
     })
 
-    console.log("🔗 createBet tx sent:", txHash)
+    console.log("🔗 createPrediction tx sent:", txHash)
 
     // Wait for confirmation
     const receipt = await publicClient.waitForTransactionReceipt({ hash: txHash })
-    console.log("🔗 createBet confirmed in block", receipt.blockNumber)
+    console.log("🔗 createPrediction confirmed in block", receipt.blockNumber)
 
     if (receipt.status === "reverted") {
       return { success: false, txHash, error: "Transaction reverted" }
@@ -303,7 +303,7 @@ export async function createBetOnChain(
 
     return { success: true, txHash }
   } catch (err: any) {
-    console.error("🔗 createBet error:", err)
+    console.error("🔗 createPrediction error:", err)
     return { success: false, error: err?.shortMessage || err?.message || String(err) }
   }
 }

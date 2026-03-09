@@ -21,7 +21,7 @@ export function RegisterPage() {
 
   const submitWallet = useCallback(async function submitWallet(walletAddress: string) {
     if (!betId || !tgUserId) {
-      setErrorMsg('Missing bet ID or Telegram user info')
+      setErrorMsg('Missing PeerCast ID or Telegram user info')
       setStatus('error')
       return
     }
@@ -66,10 +66,10 @@ export function RegisterPage() {
       <div className="max-w-md mx-auto w-full flex-1 flex flex-col">
         {/* Header */}
         <div className="text-center mb-8 pt-4">
-          <img src="/logo.svg" alt="Chatutu Logo" className="w-32 h-20 object-contain mx-auto mb-4" />
+          <img src="/logo.svg" alt="PeerCast Logo" className="w-32 h-20 object-contain mx-auto mb-4" />
           <h1 className="text-2xl font-bold mb-2">🔗 Connect Wallet</h1>
           <p className="text-tg-hint text-sm">
-            Bet #{betId} — Link your wallet to participate
+            PeerCast #{betId} — Link your wallet to participate
           </p>
         </div>
 
@@ -86,7 +86,7 @@ export function RegisterPage() {
         {tgUserId && !isConnected && (
           <div className="space-y-3">
             <p className="text-center text-tg-hint text-sm mb-4">
-              Connect your wallet to register for this bet
+              Connect your wallet to register for this PeerCast
             </p>
             {connectors.map((connector) => (
               <button

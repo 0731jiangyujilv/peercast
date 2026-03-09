@@ -50,7 +50,7 @@ interface PoRData {
 }
 
 const API_URL = import.meta.env.VITE_BOT_API_URL || 'http://localhost:3000'
-const CHATUTU_POR_ADDRESS = '0x8540A5c408ad4a099025b8EB4549A75619e9A1f0' // ChatutuPoR on Base Sepolia
+const CHATUTU_POR_ADDRESS = '0x8540A5c408ad4a099025b8EB4549A75619e9A1f0' // PeerCast PoR on Base Sepolia
 
 const CHATUTU_POR_ABI = [
   {
@@ -188,16 +188,16 @@ export function StatsPage() {
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-            📊 Chatutu Statistics
+            📊 PeerCast Statistics
           </h1>
-          <p className="text-gray-400">Real-time betting platform analytics</p>
+          <p className="text-gray-400">Real-time PeerCast platform analytics</p>
         </div>
 
         {stats && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
               <div className="flex items-center justify-between mb-2">
-                <div className="text-gray-400 text-sm">Active Bets</div>
+                <div className="text-gray-400 text-sm">Active PeerCasts</div>
                 <ActivityIcon className="w-5 h-5 text-purple-400" />
               </div>
               <div className="text-3xl font-bold">{stats.activeBetsCount}</div>
@@ -205,7 +205,7 @@ export function StatsPage() {
 
             <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
               <div className="flex items-center justify-between mb-2">
-                <div className="text-gray-400 text-sm">Total Bets</div>
+                <div className="text-gray-400 text-sm">Total PeerCasts</div>
                 <TrendingUpIcon className="w-5 h-5 text-blue-400" />
               </div>
               <div className="text-3xl font-bold">{stats.totalBetsCount}</div>
@@ -222,7 +222,7 @@ export function StatsPage() {
 
             <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
               <div className="flex items-center justify-between mb-2">
-                <div className="text-gray-400 text-sm">Settled Bets</div>
+                <div className="text-gray-400 text-sm">Settled PeerCasts</div>
                 <HistoryIcon className="w-5 h-5 text-yellow-400" />
               </div>
               <div className="text-3xl font-bold">{stats.settledBetsCount}</div>
@@ -250,7 +250,7 @@ export function StatsPage() {
                   : 'text-gray-400 hover:text-white'
               }`}
             >
-              Active Bets ({activeBets.length})
+              Active PeerCasts ({activeBets.length})
             </button>
             <button
               onClick={() => setActiveTab('history')}
@@ -284,11 +284,11 @@ export function StatsPage() {
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div>
-                    <div className="text-gray-400 text-xs mb-1">Total Bets (PoR)</div>
+                    <div className="text-gray-400 text-xs mb-1">Total PeerCasts (PoR)</div>
                     <div className="text-xl font-bold">{porData.totalBets}</div>
                   </div>
                   <div>
-                    <div className="text-gray-400 text-xs mb-1">Active Bets (PoR)</div>
+                    <div className="text-gray-400 text-xs mb-1">Active PeerCasts (PoR)</div>
                     <div className="text-xl font-bold text-orange-400">{porData.activeBets}</div>
                   </div>
                   <div>
@@ -318,7 +318,7 @@ export function StatsPage() {
                   <div className="text-2xl font-bold text-green-400">{totalWagered} USDC</div>
                 </div>
                 <div>
-                  <div className="text-gray-400 text-sm mb-1">Cancelled Bets</div>
+                  <div className="text-gray-400 text-sm mb-1">Cancelled PeerCasts</div>
                   <div className="text-2xl font-bold text-red-400">{stats?.cancelledBetsCount || 0}</div>
                 </div>
               </div>
@@ -351,7 +351,7 @@ export function StatsPage() {
         {activeTab === 'active' && (
           <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold">Active Bets</h2>
+              <h2 className="text-2xl font-bold">Active PeerCasts</h2>
               <div className="text-lg font-medium text-green-400">
                 Total: {totalWagered} USDC
               </div>
@@ -394,7 +394,7 @@ export function StatsPage() {
                 </tbody>
               </table>
               {activeBets.length === 0 && (
-                <div className="text-center py-8 text-gray-400">No active bets at the moment</div>
+                <div className="text-center py-8 text-gray-400">No active PeerCasts at the moment</div>
               )}
             </div>
           </div>
@@ -402,7 +402,7 @@ export function StatsPage() {
 
         {activeTab === 'history' && (
           <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-            <h2 className="text-2xl font-bold mb-6">Bet History</h2>
+            <h2 className="text-2xl font-bold mb-6">PeerCast History</h2>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
@@ -466,7 +466,7 @@ export function StatsPage() {
                 </tbody>
               </table>
               {historicalBets.length === 0 && (
-                <div className="text-center py-8 text-gray-400">No historical bets found</div>
+                <div className="text-center py-8 text-gray-400">No historical PeerCasts found</div>
               )}
             </div>
           </div>

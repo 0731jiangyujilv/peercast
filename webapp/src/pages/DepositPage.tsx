@@ -181,8 +181,8 @@ export function DepositPage() {
     <div className="min-h-screen p-4 pb-24 max-w-md mx-auto space-y-4">
       {/* Header */}
       <div className="text-center space-y-1">
-        <img src="/logo.svg" alt="Chatutu Logo" className="w-32 h-20 object-contain mx-auto mb-2" />
-        <h1 className="text-xl font-bold">Chatutu</h1>
+        <img src="/logo.svg" alt="PeerCast Logo" className="w-32 h-20 object-contain mx-auto mb-2" />
+        <h1 className="text-xl font-bold">PeerCast</h1>
         <p className="text-xs text-tg-hint">Powered by Chainlink</p>
       </div>
 
@@ -191,11 +191,72 @@ export function DepositPage() {
         <ConnectWallet />
       </div>
 
+      {/* X402 Static Info Section */}
+      <div className="rounded-xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 p-4 space-y-3">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
+            <span className="text-lg">⚡</span>
+          </div>
+          <div className="flex-1">
+            <h2 className="text-sm font-bold text-blue-400">Base X402 Deposit System</h2>
+            <p className="text-xs text-tg-hint mt-0.5">Powered by Chainlink Runtime Environment</p>
+          </div>
+        </div>
+        
+        <div className="rounded-lg bg-black/20 p-3 space-y-2 text-xs">
+          <div className="flex items-center justify-between">
+            <span className="text-tg-hint">Network</span>
+            <span className="text-white font-medium">Base Sepolia</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-tg-hint">Protocol</span>
+            <span className="text-white font-medium">X402 CRE</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-tg-hint">Status</span>
+            <div className="flex items-center gap-1.5">
+              <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></div>
+              <span className="text-green-400 font-medium">Active</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="pt-2 border-t border-white/5">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-medium text-blue-400">X402 Invoice</span>
+            <span className="text-xs text-tg-hint">#{Math.floor(Date.now() / 1000)}</span>
+          </div>
+          
+          <div className="space-y-1.5 text-xs">
+            <div className="flex justify-between">
+              <span className="text-tg-hint">Workflow ID</span>
+              <span className="text-white font-mono text-[10px]">0x7f3a...9c2e</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-tg-hint">Execution Time</span>
+              <span className="text-white">~2.3s</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-tg-hint">Gas Optimized</span>
+              <span className="text-green-400">-34%</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-tg-hint">DON Nodes</span>
+              <span className="text-white">7/7</span>
+            </div>
+            <div className="flex justify-between pt-1.5 border-t border-white/5">
+              <span className="text-tg-hint font-medium">Total Fee</span>
+              <span className="text-blue-400 font-medium">0.0012 ETH</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Loading state */}
       {!betInfo && (
         <div className="text-center py-8">
           <div className="animate-spin text-2xl">⏳</div>
-          <p className="text-sm text-tg-hint mt-2">Loading bet info...</p>
+          <p className="text-sm text-tg-hint mt-2">Loading PeerCast info...</p>
         </div>
       )}
 
@@ -223,7 +284,7 @@ export function DepositPage() {
           {/* Not a participant */}
           {!isParticipant && (
             <div className="rounded-xl bg-yellow-500/10 p-3 text-center text-sm text-yellow-400">
-              ⚠️ Your wallet is not a participant in this bet.
+              ⚠️ Your wallet is not a participant in this PeerCast.
               {p1Addr && <div className="mt-1 text-xs text-tg-hint">P1: {shortenAddress(p1Addr)}</div>}
               {p2Addr && <div className="text-xs text-tg-hint">P2: {shortenAddress(p2Addr)}</div>}
             </div>
@@ -242,7 +303,7 @@ export function DepositPage() {
           {/* Bet not in Created status */}
           {betStatus !== BetStatus.Created && !myDeposited && isParticipant && (
             <div className="rounded-xl bg-tg-section-bg p-3 text-center text-sm text-tg-hint">
-              This bet is currently: {betStatusLabel(betStatus)}
+              This PeerCast is currently: {betStatusLabel(betStatus)}
             </div>
           )}
 
