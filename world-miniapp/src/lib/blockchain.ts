@@ -109,7 +109,7 @@ export async function sharePrediction(predictionId: number, asset: string, direc
   const shareUrl = `https://world.org/mini-app?app_id=${process.env.NEXT_PUBLIC_APP_ID}&path=/prediction/${predictionId}`;
   
   await MiniKit.commandsAsync.share({
-    title: 'Join my prediction on PeerCast!',
+    title: 'Join my prediction on Peercast!',
     text: `I predict ${asset} will go ${direction}! Bet ${amount} USDC against me! 🎯`,
     url: shareUrl,
   });

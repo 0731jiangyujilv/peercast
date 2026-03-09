@@ -1,6 +1,6 @@
-# PeerCast - Peer-to-Peer Prediction Market
+# Peercast - Peer-to-Peer Prediction Market
 
-PeerCast is a decentralized prediction market built as a World App Mini App. Users can create 1v1 price predictions on crypto assets (BTC, ETH, LINK), stake USDC, and share predictions via World Chat to challenge friends.
+Peercast is a decentralized prediction market built as a World App Mini App. Users can create 1v1 price predictions on crypto assets (BTC, ETH, LINK), stake USDC, and share predictions via World Chat to challenge friends.
 
 ## Features
 

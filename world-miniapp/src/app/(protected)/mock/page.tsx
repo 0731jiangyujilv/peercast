@@ -106,7 +106,7 @@ export default function MockPage() {
     <>
       <Page.Header className="p-0">
         <TopBar
-          title="PeerCast"
+          title="Peercast"
           startAdornment={
             <div className="w-12 h-12 bg-pink-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
               P
@@ -140,7 +140,7 @@ export default function MockPage() {
                 {message.type === 'bot' && message.emoji && (
                   <div className="font-bold text-gray-800 mb-1 flex items-center gap-2">
                     <span className="text-xl">{message.emoji}</span>
-                    <span>PeerCast</span>
+                    <span>Peercast</span>
                   </div>
                 )}
                 <div className="text-gray-800 whitespace-pre-line text-[15px]">

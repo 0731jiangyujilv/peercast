@@ -1,247 +1,205 @@
 'use client';
 
-import { Page } from '@/components/PageLayout';
-import { BET_AMOUNTS, DURATIONS, SUPPORTED_ASSETS } from '@/config/contracts';
-import { PredictionDirection } from '@/types/prediction';
-import { Button, TopBar, LiveFeedback } from '@worldcoin/mini-apps-ui-kit-react';
+import { Logo } from '@/components/Logo';
 import { ArrowUp, ArrowDown, Clock, Dollar } from 'iconoir-react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createPredictionOnChain, sharePrediction } from '@/lib/blockchain';
-import { useSession } from 'next-auth/react';
 
 export default function CreatePredictionPage() {
   const router = useRouter();
-  const { data: session } = useSession();
   const [formData, setFormData] = useState({
     asset: 'BTC/USD',
     amount: 10,
     duration: 300,
-    direction: PredictionDirection.UP,
+    direction: 'UP',
   });
-  const [isCreating, setIsCreating] = useState(false);
-  const [buttonState, setButtonState] = useState<'pending' | 'success' | 'failed' | undefined>(undefined);
 
-  const handleCreate = async () => {
-    if (!session?.user?.walletAddress) {
-      alert('Please connect your wallet first');
-      return;
-    }
+  const assets = ['BTC/USD', 'ETH/USD', 'LINK/USD'];
+  const amounts = [1, 5, 10, 25, 50, 100];
+  const durations = [
+    { label: '5 min', value: 300 },
+    { label: '15 min', value: 900 },
+    { label: '30 min', value: 1800 },
+    { label: '1 hour', value: 3600 },
+    { label: '4 hours', value: 14400 },
+    { label: '1 day', value: 86400 },
+  ];
 
-    setIsCreating(true);
-    setButtonState('pending');
-
-    try {
-      const { betId } = await createPredictionOnChain(
-        {
-          asset: formData.asset,
-          amount: formData.amount,
-          duration: formData.duration,
-          opponent: '0x0000000000000000000000000000000000000000',
-        },
-        session.user.walletAddress
-      );
-
-      setButtonState('success');
-      
-      await sharePrediction(betId, formData.asset, formData.direction, formData.amount);
-      
-      setTimeout(() => {
-        router.push(`/prediction/${betId}`);
-      }, 1000);
-    } catch (error) {
-      console.error('Failed to create prediction:', error);
-      setButtonState('failed');
-      setTimeout(() => {
-        setButtonState(undefined);
-        setIsCreating(false);
-      }, 3000);
-    }
+  const handleCreate = () => {
+    // Simulate creation
+    const newPredictionId = Math.floor(Math.random() * 1000);
+    router.push(`/prediction/${newPredictionId}`);
   };
 
-  const selectedAsset = SUPPORTED_ASSETS.find((a) => a.symbol === formData.asset);
-
   return (
-    <>
-      <Page.Header className="p-0">
-        <TopBar title="Create Prediction" />
-      </Page.Header>
-      <Page.Main className="flex flex-col gap-6 mb-16 p-4">
-        {/* Asset Selection */}
-        <div className="space-y-3">
-          <label className="text-sm font-semibold text-gray-700">
-            Select Asset
-          </label>
-          <div className="grid grid-cols-3 gap-3">
-            {SUPPORTED_ASSETS.map((asset) => (
+    <div style={{color: '#ccc'}} className="min-h-screen bg-[#1a1a1a] relative overflow-hidden">
+      {/* Network background pattern */}
+      <div className="absolute inset-0 opacity-20">
+        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="network-create" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+              <circle cx="100" cy="100" r="2" fill="#666" opacity="0.5"/>
+              <line x1="100" y1="100" x2="200" y2="50" stroke="#444" strokeWidth="1" opacity="0.3"/>
+              <line x1="100" y1="100" x2="150" y2="200" stroke="#444" strokeWidth="1" opacity="0.3"/>
+              <line x1="100" y1="100" x2="50" y2="180" stroke="#444" strokeWidth="1" opacity="0.3"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#network-create)"/>
+        </svg>
+      </div>
+
+      <div className="relative z-10 p-4" style={{ fontFamily: 'Arial, sans-serif' }}>
+        <div className="mb-6">
+          <Logo size="md" />
+        </div>
+
+        <h1 className="text-2xl font-bold text-white mb-6">Create Prediction</h1>
+
+        <div className="space-y-6">
+          {/* Asset Selection */}
+          <div>
+            <label className="block text-sm font-semibold text-white mb-3">
+              Select Asset
+            </label>
+            <div className="grid grid-cols-3 gap-3">
+              {assets.map((asset) => (
+                <button
+                  key={asset}
+                  onClick={() => setFormData({ ...formData, asset })}
+                  className={`p-3 rounded-lg font-semibold transition-all ${
+                    formData.asset === asset
+                      ? 'bg-[#ff4d1f] text-white'
+                      : 'bg-[#2a2a2a] text-gray-200 hover:bg-[#3a3a3a]'
+                  }`}
+                >
+                  {asset.split('/')[0]}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Direction Selection */}
+          <div>
+            <label className="block text-sm font-semibold text-white mb-3">
+              Price Direction
+            </label>
+            <div className="grid grid-cols-2 gap-3">
               <button
-                key={asset.symbol}
-                onClick={() => setFormData({ ...formData, asset: asset.symbol })}
-                className={`p-4 rounded-xl border-2 transition-all ${
-                  formData.asset === asset.symbol
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-gray-200 bg-white hover:border-gray-300'
+                onClick={() => setFormData({ ...formData, direction: 'UP' })}
+                className={`p-4 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 ${
+                  formData.direction === 'UP'
+                    ? 'bg-green-500/20 text-green-300 border-2 border-green-500'
+                    : 'bg-[#2a2a2a] text-gray-200 border-2 border-[#3a3a3a] hover:border-green-500/50'
                 }`}
               >
-                <div className="text-2xl mb-1">{asset.icon}</div>
-                <div className="text-xs font-semibold">{asset.label}</div>
+                <ArrowUp className="w-5 h-5" />
+                UP
               </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Direction Selection */}
-        <div className="space-y-3">
-          <label className="text-sm font-semibold text-gray-700">
-            Your Prediction
-          </label>
-          <div className="grid grid-cols-2 gap-3">
-            <button
-              onClick={() =>
-                setFormData({ ...formData, direction: PredictionDirection.UP })
-              }
-              className={`p-6 rounded-xl border-2 transition-all ${
-                formData.direction === PredictionDirection.UP
-                  ? 'border-green-500 bg-green-50'
-                  : 'border-gray-200 bg-white hover:border-gray-300'
-              }`}
-            >
-              <ArrowUp className="w-8 h-8 mx-auto mb-2 text-green-600" />
-              <div className="text-lg font-bold text-green-600">UP</div>
-              <div className="text-xs text-gray-600 mt-1">Price will rise</div>
-            </button>
-            <button
-              onClick={() =>
-                setFormData({ ...formData, direction: PredictionDirection.DOWN })
-              }
-              className={`p-6 rounded-xl border-2 transition-all ${
-                formData.direction === PredictionDirection.DOWN
-                  ? 'border-red-500 bg-red-50'
-                  : 'border-gray-200 bg-white hover:border-gray-300'
-              }`}
-            >
-              <ArrowDown className="w-8 h-8 mx-auto mb-2 text-red-600" />
-              <div className="text-lg font-bold text-red-600">DOWN</div>
-              <div className="text-xs text-gray-600 mt-1">Price will fall</div>
-            </button>
-          </div>
-        </div>
-
-        {/* Amount Selection */}
-        <div className="space-y-3">
-          <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-            <Dollar className="w-4 h-4" />
-            Bet Amount
-          </label>
-          <div className="grid grid-cols-3 gap-2">
-            {BET_AMOUNTS.map((amt) => (
               <button
-                key={amt.value}
-                onClick={() => setFormData({ ...formData, amount: amt.value })}
-                className={`p-3 rounded-lg border-2 transition-all text-sm font-semibold ${
-                  formData.amount === amt.value
-                    ? 'border-blue-500 bg-blue-50 text-blue-700'
-                    : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
+                onClick={() => setFormData({ ...formData, direction: 'DOWN' })}
+                className={`p-4 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 ${
+                  formData.direction === 'DOWN'
+                    ? 'bg-red-500/20 text-red-300 border-2 border-red-500'
+                    : 'bg-[#2a2a2a] text-gray-200 border-2 border-[#3a3a3a] hover:border-red-500/50'
                 }`}
               >
-                {amt.label}
+                <ArrowDown className="w-5 h-5" />
+                DOWN
               </button>
-            ))}
+            </div>
           </div>
-        </div>
 
-        {/* Duration Selection */}
-        <div className="space-y-3">
-          <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-            <Clock className="w-4 h-4" />
-            Duration
-          </label>
-          <div className="grid grid-cols-2 gap-2">
-            {DURATIONS.slice(0, 6).map((dur) => (
-              <button
-                key={dur.value}
-                onClick={() => setFormData({ ...formData, duration: dur.value })}
-                className={`p-3 rounded-lg border-2 transition-all text-sm font-semibold ${
-                  formData.duration === dur.value
-                    ? 'border-blue-500 bg-blue-50 text-blue-700'
-                    : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                {dur.label}
-              </button>
-            ))}
+          {/* Amount Selection */}
+          <div>
+            <label className="block text-sm font-semibold text-white mb-3">
+              Stake Amount (USDC)
+            </label>
+            <div className="grid grid-cols-3 gap-3">
+              {amounts.map((amount) => (
+                <button
+                  key={amount}
+                  onClick={() => setFormData({ ...formData, amount })}
+                  className={`p-3 rounded-lg font-semibold transition-all ${
+                    formData.amount === amount
+                      ? 'bg-[#ff4d1f] text-white'
+                      : 'bg-[#2a2a2a] text-gray-200 hover:bg-[#3a3a3a]'
+                  }`}
+                >
+                  {amount}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Summary Card */}
-        <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-6 border border-blue-100">
-          <div className="text-sm font-semibold text-gray-600 mb-3">
-            Prediction Summary
-          </div>
-          <div className="space-y-2 text-sm">
-            <div className="flex justify-between">
-              <span className="text-gray-600">Asset:</span>
-              <span className="font-semibold">
-                {selectedAsset?.icon} {selectedAsset?.label}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Direction:</span>
-              <span
-                className={`font-bold ${
-                  formData.direction === PredictionDirection.UP
-                    ? 'text-green-600'
-                    : 'text-red-600'
-                }`}
-              >
-                {formData.direction}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Your Stake:</span>
-              <span className="font-semibold">{formData.amount} USDC</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Duration:</span>
-              <span className="font-semibold">
-                {DURATIONS.find((d) => d.value === formData.duration)?.label}
-              </span>
-            </div>
-            <div className="flex justify-between pt-2 border-t border-blue-200">
-              <span className="text-gray-600">Potential Win:</span>
-              <span className="font-bold text-green-600">
-                {formData.amount * 2} USDC
-              </span>
+          {/* Duration Selection */}
+          <div>
+            <label className="block text-sm font-semibold text-white mb-3">
+              Duration
+            </label>
+            <div className="grid grid-cols-3 gap-3">
+              {durations.map((dur) => (
+                <button
+                  key={dur.value}
+                  onClick={() => setFormData({ ...formData, duration: dur.value })}
+                  className={`p-3 rounded-lg font-semibold transition-all ${
+                    formData.duration === dur.value
+                      ? 'bg-[#ff4d1f] text-white'
+                      : 'bg-[#2a2a2a] text-gray-200 hover:bg-[#3a3a3a]'
+                  }`}
+                >
+                  {dur.label}
+                </button>
+              ))}
             </div>
           </div>
-        </div>
 
-        {/* Create Button */}
-        <LiveFeedback
-          label={{
-            failed: 'Failed to create',
-            pending: 'Creating prediction...',
-            success: 'Prediction created!',
-          }}
-          state={buttonState}
-          className="w-full"
-        >
-          <Button
+          {/* Summary Card */}
+          <div className="peercast-card">
+            <h3 className="text-base font-semibold text-white mb-3">Summary</h3>
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <span className="text-gray-400">Asset:</span>
+                <span className="font-bold text-white">{formData.asset}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Direction:</span>
+                <span className={`font-bold ${formData.direction === 'UP' ? 'text-green-400' : 'text-red-400'}`}>
+                  {formData.direction}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Stake:</span>
+                <span className="font-bold text-white">{formData.amount} USDC</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Duration:</span>
+                <span className="font-bold text-white">
+                  {durations.find(d => d.value === formData.duration)?.label}
+                </span>
+              </div>
+              <div className="flex justify-between text-[#ff4d1f] pt-2 border-t border-[#3a3a3a]">
+                <span className="font-bold">Prize Pool:</span>
+                <span className="font-bold">{formData.amount * 2} USDC</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Create Button */}
+          <button
             onClick={handleCreate}
-            size="lg"
-            variant="primary"
-            className="w-full"
-            disabled={isCreating}
+            className="peercast-button-primary w-full text-lg"
           >
             Create Prediction
-          </Button>
-        </LiveFeedback>
+          </button>
 
-        <p className="text-xs text-gray-500 text-center">
-          After creating, you&apos;ll be able to share the prediction link with your
-          opponent
-        </p>
-      </Page.Main>
-    </>
+          <button
+            onClick={() => router.push('/predictions')}
+            className="peercast-button-secondary w-full"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
