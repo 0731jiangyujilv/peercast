@@ -51,9 +51,9 @@ interface PoRData {
 }
 
 const API_URL = import.meta.env.VITE_BOT_API_URL || 'http://localhost:3000'
-const CHATUTU_POR_ADDRESS = '0x8540A5c408ad4a099025b8EB4549A75619e9A1f0' // Peercast PoR on Base Sepolia
+const PEERCAST_POR_ADDRESS = '0x8540A5c408ad4a099025b8EB4549A75619e9A1f0' // Peercast PoR on Base Sepolia
 
-const CHATUTU_POR_ABI = [
+const PEERCAST_POR_ABI = [
   {
     inputs: [],
     name: 'getLatestData',
@@ -111,8 +111,8 @@ export function StatsPage() {
         })
 
         const result = await client.readContract({
-          address: CHATUTU_POR_ADDRESS,
-          abi: CHATUTU_POR_ABI,
+          address: PEERCAST_POR_ADDRESS,
+          abi: PEERCAST_POR_ABI,
           functionName: 'getLatestData',
         })
 
@@ -310,7 +310,7 @@ export function StatsPage() {
                   </div>
                 </div>
                 <div className="mt-4 text-xs text-[#888]">
-                  Update #{porData.updateCount} | Contract: {CHATUTU_POR_ADDRESS.slice(0, 6)}...{CHATUTU_POR_ADDRESS.slice(-4)}
+                  Update #{porData.updateCount} | Contract: {PEERCAST_POR_ADDRESS.slice(0, 6)}...{PEERCAST_POR_ADDRESS.slice(-4)}
                 </div>
               </div>
             )}

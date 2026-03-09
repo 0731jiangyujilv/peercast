@@ -3,9 +3,9 @@ pragma solidity ^0.8.19;
 
 import {ReceiverTemplate} from "./interfaces/ReceiverTemplate.sol";
 
-/// @title ChatutuPoR - Proof of Reserve contract for Chatutu betting platform
+/// @title PeercastPoR - Proof of Reserve contract for Peercast betting platform
 /// @notice Stores verified statistics and leaderboard data from Chainlink CRE
-contract ChatutuPoR is ReceiverTemplate {
+contract PeercastPoR is ReceiverTemplate {
     
     struct PoRData {
         uint256 totalBets;

@@ -17,7 +17,7 @@ Peercast is a decentralized prediction market built as a World App Mini App. Use
 ### Smart Contracts (World Chain)
 - **BetFactory**: Creates and manages prediction contracts
 - **Bet**: Individual 1v1 prediction logic with deposits and settlement
-- **ChatutuPoR**: Stores platform statistics verified by Chainlink
+- **PeercastPoR**: Stores platform statistics verified by Chainlink
 
 ### Frontend (Next.js + MiniKit)
 - **Create Page**: UI for creating new predictions

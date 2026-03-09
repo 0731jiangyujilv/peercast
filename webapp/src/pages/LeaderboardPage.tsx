@@ -32,9 +32,9 @@ interface PoRData {
   updateCount: string
 }
 
-const CHATUTU_POR_ADDRESS = '0x8540A5c408ad4a099025b8EB4549A75619e9A1f0'
+const PEERCAST_POR_ADDRESS = '0x8540A5c408ad4a099025b8EB4549A75619e9A1f0'
 
-const CHATUTU_POR_ABI = [
+const PEERCAST_POR_ABI = [
   {
     inputs: [],
     name: 'getLatestData',
@@ -95,8 +95,8 @@ export function LeaderboardPage() {
         })
 
         const result = await client.readContract({
-          address: CHATUTU_POR_ADDRESS,
-          abi: CHATUTU_POR_ABI,
+          address: PEERCAST_POR_ADDRESS,
+          abi: PEERCAST_POR_ABI,
           functionName: 'getLatestData',
         })
 
@@ -380,7 +380,7 @@ export function LeaderboardPage() {
           <p>
             Data verified by Chainlink Proof of Reserve • Updated every 10 minutes •{' '}
             <a
-              href={`https://sepolia.basescan.org/address/${CHATUTU_POR_ADDRESS}`}
+              href={`https://sepolia.basescan.org/address/${PEERCAST_POR_ADDRESS}`}
               target="_blank"
               rel="noopener noreferrer"
               className="text-[#ff4d1f] hover:text-white transition-colors underline"

@@ -219,4 +219,4 @@ Check:
 
 - [Chainlink CRE docs](https://docs.chain.link/cre)
 - [CRE PoR example](https://github.com/Nalon/cre-por-llm-demo)
-- [Chatutu project docs](../README.md)
+- [Peercast project docs](../README.md)

@@ -16737,12 +16737,12 @@ var onCronTrigger = (runtime2, payload) => {
   if (!payload.scheduledExecutionTime) {
     throw new Error("Scheduled execution time is required");
   }
-  runtime2.log("\uD83D\uDE80 Running Chatutu PoR Workflow");
+  runtime2.log("\uD83D\uDE80 Running Peercast PoR Workflow");
   const offchainData = getOffchainData(runtime2);
   const onchainData = getOnchainData(runtime2);
   const isValid2 = verifyData(runtime2, offchainData, onchainData);
   const txnHash = updatePoRContract(runtime2, offchainData, onchainData, isValid2);
-  runtime2.log("✅ Finished Chatutu PoR Workflow");
+  runtime2.log("✅ Finished Peercast PoR Workflow");
   return `PoR Update: ${isValid2 ? "VALID" : "INVALID"} | Tx: ${txnHash}`;
 };
 var getOffchainData = (runtime2) => {

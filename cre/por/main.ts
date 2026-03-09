@@ -102,14 +102,14 @@ const onCronTrigger = (runtime: Runtime<Config>, payload: CronPayload): string =
     throw new Error('Scheduled execution time is required')
   }
 
-  runtime.log('🚀 Running Chatutu PoR Workflow')
+  runtime.log('🚀 Running Peercast PoR Workflow')
 
   const offchainData = getOffchainData(runtime)
   const onchainData = getOnchainData(runtime)
   const isValid = verifyData(runtime, offchainData, onchainData)
   const txnHash = updatePoRContract(runtime, offchainData, onchainData, isValid)
 
-  runtime.log('✅ Finished Chatutu PoR Workflow')
+  runtime.log('✅ Finished Peercast PoR Workflow')
 
   return `PoR Update: ${isValid ? 'VALID' : 'INVALID'} | Tx: ${txnHash}`
 }

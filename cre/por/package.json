@@ -1,7 +1,7 @@
 {
   "name": "Peercast-por",
   "version": "1.0.0",
-  "description": "Chainlink CRE PoR for Chatutu betting platform",
+  "description": "Chainlink CRE PoR for Peercast betting platform",
   "main": "main.ts",
   "scripts": {
     "simulate": "cre workflow simulate por",

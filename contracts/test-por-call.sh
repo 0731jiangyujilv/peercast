@@ -1,5 +1,5 @@
 #!/bin/bash
-# 测试直接调用 ChatutuPoR 合约
+# 测试直接调用 PeercastPoR 合约
 
 # 编码报告数据
 # activeBetsCount=0, totalBetsCount=2, settledBetsCount=2, totalVolume=2e18, topPlayerProfit=1e18, isValid=false, timestamp=now
