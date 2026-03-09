@@ -21,7 +21,7 @@ export function RegisterPage() {
 
   const submitWallet = useCallback(async function submitWallet(walletAddress: string) {
     if (!betId || !tgUserId) {
-      setErrorMsg('Missing PeerCast ID or Telegram user info')
+      setErrorMsg('Missing Peercast ID or Telegram user info')
       setStatus('error')
       return
     }
@@ -62,14 +62,20 @@ export function RegisterPage() {
   }, [betId, tgUserId])
 
   return (
-    <div className="min-h-screen bg-tg-bg text-tg-text p-4 flex flex-col">
-      <div className="max-w-md mx-auto w-full flex-1 flex flex-col">
+    <div className="min-h-screen bg-[#1a1a1a] text-white p-4 flex flex-col relative overflow-hidden" style={{ fontFamily: 'Arial, sans-serif' }}>
+      {/* Background image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
+        style={{ backgroundImage: 'url(/background.png)' }}
+      />
+      
+      <div className="max-w-md mx-auto w-full flex-1 flex flex-col relative z-10">
         {/* Header */}
         <div className="text-center mb-8 pt-4">
-          <img src="/logo.svg" alt="PeerCast Logo" className="w-32 h-20 object-contain mx-auto mb-4" />
+          <img src="/logo.svg?v=1" alt="Peercast Logo" className="w-32 h-20 object-contain mx-auto mb-4" />
           <h1 className="text-2xl font-bold mb-2">🔗 Connect Wallet</h1>
           <p className="text-tg-hint text-sm">
-            PeerCast #{betId} — Link your wallet to participate
+            Peercast #{betId} — Link your wallet to participate
           </p>
         </div>
 
@@ -86,7 +92,7 @@ export function RegisterPage() {
         {tgUserId && !isConnected && (
           <div className="space-y-3">
             <p className="text-center text-tg-hint text-sm mb-4">
-              Connect your wallet to register for this PeerCast
+              Connect your wallet to register for this Peercast
             </p>
             {connectors.map((connector) => (
               <button

@@ -1,7 +1,7 @@
 {
   "name": "peercast",
   "version": "0.1.0",
-  "description": "PeerCast — 1v1 Crypto PeerCast Telegram Bot with Chainlink Integration",
+  "description": "Peercast — 1v1 Crypto Peercast Telegram Bot with Chainlink Integration",
   "private": true,
   "scripts": {
     "dev": "pm2 start ecosystem.config.js",

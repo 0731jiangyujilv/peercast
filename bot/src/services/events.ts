@@ -125,7 +125,7 @@ async function handleBetCreated(log: any) {
 
   // Register Chainlink Automation upkeep (async, non-blocking)
   try {
-    const betLabel = `PeerCast #${onChainBetId} (${asset})`
+    const betLabel = `Peercast #${onChainBetId} (${asset})`
     const result = await registerAutomationUpkeep(contractAddr, betLabel)
     if (result.success) {
       console.log(`⚡ Automation upkeep registered for ${contractAddr}`)

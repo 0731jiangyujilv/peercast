@@ -12,9 +12,9 @@ async function main() {
     process.exit(1)
   }
 
-  console.log(`\n🎯 Calling registerAutomationUpkeep("${betAddress}", "Test PeerCast")...\n`)
+  console.log(`\n🎯 Calling registerAutomationUpkeep("${betAddress}", "Test Peercast")...\n`)
 
-  const result = await registerAutomationUpkeep(betAddress, "Test PeerCast")
+  const result = await registerAutomationUpkeep(betAddress, "Test Peercast")
 
   console.log("\n📋 Result:", JSON.stringify(result, null, 2))
 

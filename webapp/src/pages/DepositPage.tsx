@@ -178,13 +178,35 @@ export function DepositPage() {
   }
 
   return (
-    <div className="min-h-screen p-4 pb-24 max-w-md mx-auto space-y-4">
+    <div className="min-h-screen bg-[#1a1a1a] relative" style={{ fontFamily: 'Arial, sans-serif' }}>
+      {/* Background image - fixed to cover full viewport */}
+      <div 
+        className="fixed inset-0 bg-cover bg-center bg-no-repeat opacity-30"
+        style={{ backgroundImage: 'url(/background.png)' }}
+      />
+      
+      <div className="relative z-10 p-4 pb-24 max-w-4xl mx-auto space-y-6">
+
       {/* Header */}
-      <div className="text-center space-y-1">
-        <img src="/logo.svg" alt="PeerCast Logo" className="w-32 h-20 object-contain mx-auto mb-2" />
-        <h1 className="text-xl font-bold">PeerCast</h1>
-        <p className="text-xs text-tg-hint">Powered by Chainlink</p>
+      <div className="relative z-10 space-y-6 py-8">
+        <img src="/logo.svg?v=1" alt="Peercast Logo" className="h-16" />
+        
+        <div className="space-y-4">
+          <div className="flex items-start gap-3">
+            <span className="text-white text-2xl mt-1">↗</span>
+            <h1 className="text-white text-4xl font-normal">
+              a social-native prediction network
+            </h1>
+          </div>
+          
+          <p className="text-[#888] text-xl pl-12">
+            chat → smart contract → chainlink cre → settlement
+          </p>
+
+        </div>
       </div>
+
+      <div className="relative z-10 space-y-4">
 
       {/* Wallet */}
       <div className="flex justify-center">
@@ -256,7 +278,7 @@ export function DepositPage() {
       {!betInfo && (
         <div className="text-center py-8">
           <div className="animate-spin text-2xl">⏳</div>
-          <p className="text-sm text-tg-hint mt-2">Loading PeerCast info...</p>
+          <p className="text-sm text-tg-hint mt-2">Loading Peercast info...</p>
         </div>
       )}
 
@@ -284,7 +306,7 @@ export function DepositPage() {
           {/* Not a participant */}
           {!isParticipant && (
             <div className="rounded-xl bg-yellow-500/10 p-3 text-center text-sm text-yellow-400">
-              ⚠️ Your wallet is not a participant in this PeerCast.
+              ⚠️ Your wallet is not a participant in this Peercast.
               {p1Addr && <div className="mt-1 text-xs text-tg-hint">P1: {shortenAddress(p1Addr)}</div>}
               {p2Addr && <div className="text-xs text-tg-hint">P2: {shortenAddress(p2Addr)}</div>}
             </div>
@@ -303,7 +325,7 @@ export function DepositPage() {
           {/* Bet not in Created status */}
           {betStatus !== BetStatus.Created && !myDeposited && isParticipant && (
             <div className="rounded-xl bg-tg-section-bg p-3 text-center text-sm text-tg-hint">
-              This PeerCast is currently: {betStatusLabel(betStatus)}
+              This Peercast is currently: {betStatusLabel(betStatus)}
             </div>
           )}
 
@@ -390,16 +412,18 @@ export function DepositPage() {
       )}
 
       {/* Footer */}
-      <div className="text-center text-xs text-tg-hint pt-4">
+      <div className="text-center text-xs text-[#888] pt-4">
         <a
           href={`https://sepolia.basescan.org/address/${contractAddress}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-tg-link underline"
+          className="text-[#ff4d1f] underline hover:text-white transition-colors"
         >
           View Contract on BaseScan ↗
         </a>
       </div>
+      </div>
+    </div>
     </div>
   )
 }

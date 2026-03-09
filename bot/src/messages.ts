@@ -2,7 +2,7 @@ import type { ParsedBetIntent } from "./services/openai"
 
 export function welcomeMessage(): string {
   return [
-    "🎲 *PeerCast — 1v1 Crypto Prediction*",
+    "🎲 *Peercast — 1v1 Crypto Prediction*",
     "",
     "Instant crypto price predictions in group chats!",
     "",

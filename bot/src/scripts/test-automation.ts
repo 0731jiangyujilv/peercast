@@ -146,7 +146,7 @@ async function main() {
           gasLimit: 500_000,
           triggerType: 0,
           billingToken: LINK_TOKEN,
-          name: `PeerCast Test: ${betAddr.slice(0, 10)}`,
+          name: `Peercast Test: ${betAddr.slice(0, 10)}`,
           encryptedEmail: "0x" as `0x${string}`,
           checkData: "0x" as `0x${string}`,
           triggerConfig: "0x" as `0x${string}`,

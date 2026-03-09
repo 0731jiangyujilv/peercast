@@ -20,7 +20,7 @@ export const Logo = ({ size = 'md', className = '' }: LogoProps) => {
 
   return (
     <div className={`flex items-center ${className}`}>
-      <img src="/logo.svg" alt="Peercast Logo" className={heightSizes[size]} />
+      <img src="/logo.svg?v=1" alt="Peercast Logo" className={heightSizes[size]} />
     </div>
   );
 };

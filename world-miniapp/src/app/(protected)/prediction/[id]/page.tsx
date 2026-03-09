@@ -73,17 +73,6 @@ export default function PredictionDetailPage({
               chat → smart contract → chainlink cre → settlement
             </p>
 
-            <div className="flex items-center gap-3 pl-12 pt-2">
-              <span className="text-white text-lg">⊕</span>
-              <a 
-                href="https://peercast.live" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-[#888] text-lg underline hover:text-white transition-colors"
-              >
-                peercast.live
-              </a>
-            </div>
           </div>
         </div>
 

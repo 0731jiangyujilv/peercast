@@ -175,68 +175,66 @@ export function LeaderboardPage() {
     }
   }
 
-  const getRankBadgeColor = (rank: number) => {
-    switch (rank) {
-      case 1:
-        return 'bg-gradient-to-r from-yellow-400 to-yellow-600'
-      case 2:
-        return 'bg-gradient-to-r from-gray-300 to-gray-500'
-      case 3:
-        return 'bg-gradient-to-r from-amber-500 to-amber-700'
-      default:
-        return 'bg-gray-100'
-    }
-  }
-
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading leaderboard...</p>
+      <div className="min-h-screen bg-[#1a1a1a] flex items-center justify-center relative overflow-hidden" style={{ fontFamily: 'Arial, sans-serif' }}>
+        {/* Background image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
+          style={{ backgroundImage: 'url(/background.png)' }}
+        />
+        <div className="text-center relative z-10">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#ff4d1f] mx-auto mb-4"></div>
+          <p className="text-[#888]">Loading leaderboard...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 py-8 px-4">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-[#1a1a1a] py-8 px-4 relative overflow-hidden" style={{ fontFamily: 'Arial, sans-serif' }}>
+      {/* Background image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
+        style={{ backgroundImage: 'url(/background.png)' }}
+      />
+      
+      <div className="max-w-6xl mx-auto relative z-10">
         {/* Header */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <TrendingUp className="w-10 h-10 text-purple-600" />
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+            <TrendingUp className="w-10 h-10 text-[#ff4d1f]" />
+            <h1 className="text-4xl font-bold text-white">
               Profit Leaderboard
             </h1>
           </div>
-          <p className="text-gray-600 text-lg">Top performers verified by Chainlink PoR</p>
+          <p className="text-[#888] text-lg">Top performers verified by Chainlink PoR</p>
         </div>
 
         {/* Platform Statistics (from API) */}
         {apiStats && (
-          <div className="bg-white rounded-2xl shadow-lg p-6 mb-6 border-2 border-blue-100">
+          <div className="bg-[#2a2a2a] rounded-2xl shadow-lg p-6 mb-6 border border-[#3a3a3a]">
             <div className="flex items-center gap-3 mb-4">
-              <Activity className="w-6 h-6 text-blue-600" />
-              <h2 className="text-xl font-bold text-gray-800">Platform Statistics</h2>
+              <Activity className="w-6 h-6 text-[#ff4d1f]" />
+              <h2 className="text-xl font-bold text-white">Platform Statistics</h2>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-blue-50 rounded-lg p-3">
-                <p className="text-sm text-gray-600 mb-1">Active Bets</p>
-                <p className="text-2xl font-bold text-blue-600">{apiStats.activeBetsCount}</p>
+              <div className="bg-[#1a1a1a] rounded-lg p-3 border border-[#3a3a3a]">
+                <p className="text-sm text-[#888] mb-1">Active Bets</p>
+                <p className="text-2xl font-bold text-[#ff4d1f]">{apiStats.activeBetsCount}</p>
               </div>
-              <div className="bg-purple-50 rounded-lg p-3">
-                <p className="text-sm text-gray-600 mb-1">Total Bets</p>
-                <p className="text-2xl font-bold text-purple-600">{apiStats.totalBetsCount}</p>
+              <div className="bg-[#1a1a1a] rounded-lg p-3 border border-[#3a3a3a]">
+                <p className="text-sm text-[#888] mb-1">Total Bets</p>
+                <p className="text-2xl font-bold text-[#ff4d1f]">{apiStats.totalBetsCount}</p>
               </div>
-              <div className="bg-green-50 rounded-lg p-3">
-                <p className="text-sm text-gray-600 mb-1">Settled Bets</p>
-                <p className="text-2xl font-bold text-green-600">{apiStats.settledBetsCount}</p>
+              <div className="bg-[#1a1a1a] rounded-lg p-3 border border-[#3a3a3a]">
+                <p className="text-sm text-[#888] mb-1">Settled Bets</p>
+                <p className="text-2xl font-bold text-green-400">{apiStats.settledBetsCount}</p>
               </div>
-              <div className="bg-amber-50 rounded-lg p-3">
-                <p className="text-sm text-gray-600 mb-1">Total Volume</p>
-                <p className="text-2xl font-bold text-amber-600">{parseFloat(apiStats.totalVolume).toFixed(2)}</p>
+              <div className="bg-[#1a1a1a] rounded-lg p-3 border border-[#3a3a3a]">
+                <p className="text-sm text-[#888] mb-1">Total Volume</p>
+                <p className="text-2xl font-bold text-green-400">{parseFloat(apiStats.totalVolume).toFixed(2)}</p>
               </div>
             </div>
           </div>
@@ -244,49 +242,49 @@ export function LeaderboardPage() {
 
         {/* Chainlink PoR Verification */}
         {porData && (
-          <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 border-2 border-purple-100">
+          <div className="bg-[#2a2a2a] rounded-2xl shadow-lg p-6 mb-8 border border-[#ff4d1f]/30">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
-                <Shield className="w-6 h-6 text-purple-600" />
-                <h2 className="text-xl font-bold text-gray-800">
+                <Shield className="w-6 h-6 text-[#ff4d1f]" />
+                <h2 className="text-xl font-bold text-white">
                   {porData.isValid ? 'Chainlink PoR Verification' : 'Platform Statistics'}
                 </h2>
               </div>
               <div className="flex items-center gap-2">
                 {porData.isValid ? (
                   <>
-                    <CheckCircle className="w-5 h-5 text-green-500" />
-                    <span className="text-green-600 font-semibold">Verified by Chainlink</span>
+                    <CheckCircle className="w-5 h-5 text-green-400" />
+                    <span className="text-green-400 font-semibold">Verified by Chainlink</span>
                   </>
                 ) : (
                   <>
-                    <Clock className="w-5 h-5 text-amber-500" />
-                    <span className="text-amber-600 font-semibold">Verification via Chainlink PoR</span>
+                    <Clock className="w-5 h-5 text-[#ff4d1f]" />
+                    <span className="text-[#ff4d1f] font-semibold">Verification via Chainlink PoR</span>
                   </>
                 )}
               </div>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-purple-50 rounded-lg p-3">
-                <p className="text-sm text-gray-600 mb-1">Total Bets</p>
-                <p className="text-2xl font-bold text-purple-600">{porData.totalBets}</p>
+              <div className="bg-[#1a1a1a] rounded-lg p-3 border border-[#3a3a3a]">
+                <p className="text-sm text-[#888] mb-1">Total Bets</p>
+                <p className="text-2xl font-bold text-[#ff4d1f]">{porData.totalBets}</p>
               </div>
-              <div className="bg-blue-50 rounded-lg p-3">
-                <p className="text-sm text-gray-600 mb-1">Settled Bets</p>
-                <p className="text-2xl font-bold text-blue-600">{porData.settledBets}</p>
+              <div className="bg-[#1a1a1a] rounded-lg p-3 border border-[#3a3a3a]">
+                <p className="text-sm text-[#888] mb-1">Settled Bets</p>
+                <p className="text-2xl font-bold text-[#ff4d1f]">{porData.settledBets}</p>
               </div>
-              <div className="bg-green-50 rounded-lg p-3">
-                <p className="text-sm text-gray-600 mb-1">Total Volume</p>
-                <p className="text-2xl font-bold text-green-600">{parseFloat(porData.totalVolume).toFixed(2)}</p>
+              <div className="bg-[#1a1a1a] rounded-lg p-3 border border-[#3a3a3a]">
+                <p className="text-sm text-[#888] mb-1">Total Volume</p>
+                <p className="text-2xl font-bold text-green-400">{parseFloat(porData.totalVolume).toFixed(2)}</p>
               </div>
-              <div className="bg-amber-50 rounded-lg p-3">
-                <p className="text-sm text-gray-600 mb-1">Top Profit</p>
-                <p className="text-2xl font-bold text-amber-600">{parseFloat(porData.topPlayerProfit).toFixed(2)}</p>
+              <div className="bg-[#1a1a1a] rounded-lg p-3 border border-[#3a3a3a]">
+                <p className="text-sm text-[#888] mb-1">Top Profit</p>
+                <p className="text-2xl font-bold text-green-400">{parseFloat(porData.topPlayerProfit).toFixed(2)}</p>
               </div>
             </div>
 
-            <div className="mt-4 flex items-center gap-2 text-sm text-gray-500">
+            <div className="mt-4 flex items-center gap-2 text-sm text-[#888]">
               <Clock className="w-4 h-4" />
               <span>Last updated: {porData.timestamp}</span>
               {porData.isValid && <span className="ml-4">Updates: {porData.updateCount}</span>}
@@ -295,10 +293,10 @@ export function LeaderboardPage() {
         )}
 
         {/* Leaderboard Table */}
-        <div className="bg-white rounded-2xl shadow-lg overflow-hidden border-2 border-purple-100">
+        <div className="bg-[#2a2a2a] rounded-2xl shadow-lg overflow-hidden border border-[#3a3a3a]">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+              <thead className="bg-[#1a1a1a] text-white border-b border-[#3a3a3a]">
                 <tr>
                   <th className="px-6 py-4 text-left text-sm font-semibold">Rank</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold">Player</th>
@@ -309,10 +307,10 @@ export function LeaderboardPage() {
                   <th className="px-6 py-4 text-right text-sm font-semibold">Total Profit</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-[#3a3a3a]">
                 {leaderboard.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="px-6 py-12 text-center text-gray-500">
+                    <td colSpan={7} className="px-6 py-12 text-center text-[#888]">
                       No leaderboard data available yet
                     </td>
                   </tr>
@@ -320,20 +318,18 @@ export function LeaderboardPage() {
                   leaderboard.map((entry) => (
                     <tr
                       key={entry.username}
-                      className={`hover:bg-purple-50 transition-colors ${
-                        entry.rank <= 3 ? getRankBadgeColor(entry.rank) + ' bg-opacity-10' : ''
-                      }`}
+                      className="hover:bg-[#1a1a1a] transition-colors"
                     >
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">{getRankIcon(entry.rank)}</div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
-                          <span className="font-semibold text-gray-800">@{entry.username}</span>
+                          <span className="font-semibold text-white">@{entry.username}</span>
                           {entry.rank === 1 && <Trophy className="w-4 h-4 text-yellow-500" />}
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-center text-gray-700">{entry.wins + entry.losses}</td>
+                      <td className="px-6 py-4 text-center text-white">{entry.wins + entry.losses}</td>
                       <td className="px-6 py-4 text-center">
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                           {entry.wins}
@@ -380,14 +376,14 @@ export function LeaderboardPage() {
         </div>
 
         {/* Footer Note */}
-        <div className="mt-6 text-center text-sm text-gray-500">
+        <div className="mt-6 text-center text-sm text-[#888]">
           <p>
             Data verified by Chainlink Proof of Reserve • Updated every 10 minutes •{' '}
             <a
               href={`https://sepolia.basescan.org/address/${CHATUTU_POR_ADDRESS}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-purple-600 hover:underline"
+              className="text-[#ff4d1f] hover:text-white transition-colors underline"
             >
               View Contract
             </a>
