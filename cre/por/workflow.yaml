@@ -1,6 +1,6 @@
 staging-settings:
   user-workflow:
-    workflow-name: "chatutu-por"
+    workflow-name: "Peercast-por"
   workflow-artifacts:
     workflow-path: "./main.ts"
     config-path: "./config.staging.json"
@@ -8,7 +8,7 @@ staging-settings:
 
 production-settings:
   user-workflow:
-    workflow-name: "chatutu-por"
+    workflow-name: "Peercast-por"
   workflow-artifacts:
     workflow-path: "./main.ts"
     config-path: "./config.production.json"

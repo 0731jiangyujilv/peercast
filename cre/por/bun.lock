@@ -2,7 +2,7 @@
   "lockfileVersion": 1,
   "workspaces": {
     "": {
-      "name": "chatutu-por",
+      "name": "Peercast-por",
       "dependencies": {
         "@chainlink/cre-sdk": "latest",
         "viem": "^2.0.0",

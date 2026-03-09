@@ -12,7 +12,7 @@ const envSchema = z.object({
   WORLD_CHAIN_RPC_URL: z.string().default("https://worldchain-sepolia.g.alchemy.com/public"),
   WORLD_CHAIN_ID: z.coerce.number().default(4801),
   WORLD_PREDICTION_FACTORY_ADDRESS: z.string().default("0xFAE423C82F4615ffc41fa17eDC3cBf5C8b219BEC"),
-  WEBAPP_URL: z.string().default("https://chatutu.example.com"),
+  WEBAPP_URL: z.string().default("https://Peercast.example.com"),
   OPERATOR_PRIVATE_KEY: z.string().min(1),
   BASESCAN_API_KEY: z.string().default(""),
   CONTRACTS_PATH: z.string().default("../contracts"),

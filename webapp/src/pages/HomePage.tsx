@@ -7,14 +7,13 @@ export function HomePage() {
       
       <div className="relative z-10 space-y-6">
         {/* Logo and branding */}
-        <div className="flex items-center justify-center gap-4">
-          <span className="text-6xl font-bold text-[#ff3333]">] [</span>
-          <span className="text-6xl font-bold text-white">Peercast</span>
+        <div className="flex items-center justify-center">
+          <img src="/logo.svg" alt="Peercast" className="h-24" />
         </div>
         
         {/* Tagline */}
         <div className="flex items-center justify-center gap-2 text-xl text-white">
-          <span className="text-2xl">↗</span>
+          <img src="/arrow.png" alt="arrow" className="w-2 h-2" />
           <span>a social-native prediction network</span>
         </div>
       </div>
